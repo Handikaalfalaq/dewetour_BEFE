@@ -24,7 +24,8 @@ func main() {
 
 	routes.RouteInit(e.Group("/api/v1"))
 
-	e.Static("/uploads", "uploads")
+	e.Static("/uploads", "./uploads")
+
+	fmt.Println("server running localhost:5000")
 	e.Logger.Fatal(e.Start("localhost:5000"))
-	fmt.Println("Running :)")
 }

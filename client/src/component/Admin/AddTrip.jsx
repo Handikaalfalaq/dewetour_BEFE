@@ -36,12 +36,6 @@ function FormAddTrip() {
           [e.target.name]:
             e.target.type === 'file' ? e.target.files : e.target.value,
         });
-    
-        // Create image url for preview
-        // if (e.target.type === 'file') {
-          // let url = URL.createObjectURL(e.target.files[0]);
-          // setPreview(url);
-        // }
       };
 
       const handleSubmit = useMutation(async (e) => {
@@ -70,8 +64,6 @@ function FormAddTrip() {
           formData.set('quotaFilled', formTrip.quotaFilled);
           formData.set('description', formTrip.description);
           formData.append('image', formTrip.image[0], formTrip.image[0].name);
-          
-          console.log("formData", formData)
           
           const response = await API.post('/trip', formData, config);
           console.log("add trip success : ", response);

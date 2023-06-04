@@ -14,10 +14,9 @@ import { useNavigate } from 'react-router-dom';
 
 function Navbars() {
   const navigate = useNavigate();
-  const {userLogin, setUserLogin, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, appearancePay, setAppearancePay, dataBooking} = useContext(DataContext)
+  const {userLogin, setUserLogin, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, appearancePay, setAppearancePay, dataBooking, setMessage} = useContext(DataContext)
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-
 
   function getData(inputEmail, inputPassword) {
     if (inputEmail === 'customer@gmail.com') {
@@ -72,6 +71,7 @@ function Navbars() {
 
   const handleCloseLoginModal = () => {
     setShowLoginModal(false);
+    setMessage();
   };
 
   const handleCloseRegisterModal = () => {

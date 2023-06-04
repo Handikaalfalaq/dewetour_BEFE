@@ -81,7 +81,6 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 	trip := models.Trip{
 		Title:     c.FormValue("title"),
 		CountryId: countryId,
-		// Country:        countries,
 		Accomodation:   c.FormValue("accomodation"),
 		Transportation: c.FormValue("transportation"),
 		Eat:            c.FormValue("eat"),

@@ -8,12 +8,6 @@ import { API } from '../../config/api';
 
 function FormAddCountry() {
   const navigate = useNavigate();
-  // const { data: dataCountry } = useQuery("dataCountryCache", async () => {
-  //   const response = await API.post("/country");
-  //   return response.data.data;
-  // });
-
-  // console.log("datacountry line 16", dataCountry);
 
   const [formCountry, setFormCountry] = useState({
     Name: ''

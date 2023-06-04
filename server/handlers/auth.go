@@ -43,11 +43,12 @@ func (h *handlerAuth) Register(c echo.Context) error {
 	}
 
 	user := models.User{
-		Name:     request.Name,
-		Email:    request.Email,
+		FullName: c.FormValue("fullname"),
+		Email:    c.FormValue("email"),
 		Password: password,
-		Phone:    request.Phone,
-		Address:  request.Address,
+		Phone:    c.FormValue("phone"),
+		Address:  c.FormValue("address"),
+		Role:     "user",
 	}
 
 	data, err := h.AuthRepository.Register(user)
@@ -93,7 +94,6 @@ func (h *handlerAuth) Login(c echo.Context) error {
 	}
 
 	loginResponse := authdto.LoginResponse{
-		Name:     user.Name,
 		Email:    user.Email,
 		Password: user.Password,
 		Token:    token,

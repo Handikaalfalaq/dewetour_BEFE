@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import FolderImage from '../img/FolderImg';
+import { DataContext } from "../../context/dataContext";
 import '../assets/Index.css'
 
 function FormLogin({getDatas, openRegister}) {
+  const {message} = useContext(DataContext)
   const [inputEmail, setInputEmail] = useState('');
   const [inputPassword, setInputPassword] = useState('');
   
@@ -16,6 +18,7 @@ function FormLogin({getDatas, openRegister}) {
         <img src={FolderImage.Palm} alt="palm" style={{position:'absolute', left:'0px'}}/>
         <img src={FolderImage.Hibiscus} alt="hibiscus" style={{position:'absolute', right:'0px'}}/>
         <p style={{margin:'51px 0px 75px 0px', textAlign:'center', fontSize:'36px'}}>Login</p>
+        {message && message}
         <Form.Group controlId="formBasicEmail" style={{marginBottom:'35px'}}>
             <Form.Label>Email</Form.Label>
             <Form.Control value={inputEmail} onChange={(e) => setInputEmail(e.target.value)} type="text" placeholder="Enter Email" />

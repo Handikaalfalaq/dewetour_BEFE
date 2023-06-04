@@ -13,7 +13,7 @@ function Home() {
     const response = await API.get("/trip")
     return response.data.data
 })
-  
+  console.log(dataAllTrip)
   const navigate = useNavigate()
   return (
       <Container className='inihome' style={{ position:'relative', maxWidth:'1440px', height:'auto', paddingBottom:'100px'}}>
