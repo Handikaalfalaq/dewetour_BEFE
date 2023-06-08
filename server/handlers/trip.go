@@ -75,12 +75,12 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 	night, _ := strconv.Atoi(c.FormValue("night"))
 	price, _ := strconv.Atoi(c.FormValue("price"))
 	quotaMax, _ := strconv.Atoi(c.FormValue("quotaMax"))
-	quotaFilled, _ := strconv.Atoi(c.FormValue("quotaFilled"))
+	// quotaFilled, _ := strconv.Atoi(c.FormValue("quotaFilled"))
 	countryId, _ := strconv.Atoi(c.FormValue("country_id"))
 
 	trip := models.Trip{
-		Title:     c.FormValue("title"),
-		CountryId: countryId,
+		Title:          c.FormValue("title"),
+		CountryId:      countryId,
 		Accomodation:   c.FormValue("accomodation"),
 		Transportation: c.FormValue("transportation"),
 		Eat:            c.FormValue("eat"),
@@ -89,7 +89,7 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 		DateTrip:       c.FormValue("dateTrip"),
 		Price:          price,
 		QuotaMax:       quotaMax,
-		QuotaFilled:    quotaFilled,
+		QuotaFilled:    0,
 		Description:    c.FormValue("description"),
 		Image:          dataFile,
 	}

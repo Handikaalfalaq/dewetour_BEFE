@@ -14,45 +14,12 @@ import { useNavigate } from 'react-router-dom';
 
 function Navbars() {
   const navigate = useNavigate();
-  const {userLogin, setUserLogin, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, appearancePay, setAppearancePay, dataBooking, setMessage} = useContext(DataContext)
-  const [showLoginModal, setShowLoginModal] = useState(false);
+  const {userLogin, setUserLogin, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, appearancePay, setAppearancePay, dataBooking, setMessage, showLoginModal, setShowLoginModal} = useContext(DataContext)
   const [showRegisterModal, setShowRegisterModal] = useState(false);
-
-  function getData(inputEmail, inputPassword) {
-    if (inputEmail === 'customer@gmail.com') {
-      if (inputPassword === '1') {
-        setNavbarProfile(true)
-        setUserLogin(true);
-        setShowLoginModal(false);
-        navigate('/');
-        alert('Login akun customer berhasil');
-        inputEmail = '';
-        inputPassword = '';
-      } else {
-        setShowLoginModal(false);
-        alert('Password salah');
-      }
-    } else if (inputEmail === 'admin@gmail.com') {
-      if (inputPassword === '1') {
-        setNavbarProfile(true);
-        setAdminLogin(true);
-        setShowLoginModal(false);
-        navigate('/TransactionList');
-        alert('Login akun admin berhasil');
-        inputEmail = '';
-        inputPassword = '';
-      } else {
-        setShowLoginModal(false);
-        alert('Password salah');
-      }
-    } else {
-      setShowLoginModal(false);
-      alert('Email salah');
-    }
-  }
   
-
   function logout () {
+    localStorage.removeItem("token")
+    navigate("/")
     setUserLogin(false);
     setAdminLogin(false);
     setNavbarProfile(false);
@@ -161,7 +128,8 @@ function Navbars() {
         </Navbar>
   
       <Modal show={showLoginModal} onHide={handleCloseLoginModal}>
-        <FormLogin getDatas={getData} openRegister={handleOpenRegisterModal} />
+        {/* <FormLogin getDatas={getData} openRegister={handleOpenRegisterModal} /> */}
+        <FormLogin openRegister={handleOpenRegisterModal} />
       </Modal>
   
       <Modal show={showRegisterModal} onHide={handleCloseRegisterModal}>

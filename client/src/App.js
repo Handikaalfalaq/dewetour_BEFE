@@ -1,4 +1,8 @@
-import {Route, Routes, BrowserRouter as Router,} from "react-router-dom"
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unused-vars */
+import { useContext, useEffect, useState } from 'react';
+import {DataContext} from "./context/dataContext"
+import {Route, Routes, BrowserRouter as Router, useNavigate} from "react-router-dom"
 import Index from "./pages/Home"
 import DetailTour from './pages/DetailTour'
 import PaymentPage from './pages/Payment'
@@ -10,10 +14,74 @@ import FolderImage from "./component/img/FolderImg"
 import Transaction from "./pages/transaction"
 import IncomeTripAdmin from "./pages/IncomeTrip"
 import AddTripForm from "./pages/AddTrip"
+import UpdateTripForm from "./pages/updateTrip"
+
 import AddCountryForm from "./pages/AddCountry"
 import PrivateRoute from "./pages/PrivateRoutes"
+import { API, setAuthToken } from './config/api';
+import jwt_decode from "jwt-decode";
+
 
 function App() {
+  // let navigate = useNavigate();
+  const {message, setMessage, setNavbarProfile, setUserLogin, setAdminLogin, setShowLoginModal, setIdUserLogin, dataUserLogin, setDataUserLogin} = useContext(DataContext)
+  // let navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true)
+  // mengambil token dan mengubah menjadi id
+  const token = localStorage.getItem("token");
+
+  useEffect(() => {
+    // Redirect Auth but just when isLoading is false
+    if (!isLoading) {
+      if (token == null) {
+        // navigate('/');
+        console.log("salah")
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (token != null) {
+      setAuthToken(token)
+        checkUser()
+        console.log("benar")
+    } else {
+      setIsLoading(false)
+    }
+  }, [isLoading, token]);
+
+  const checkUser = async () => {
+  try { 
+    const response = await API.get('/check-auth');
+    // Get user data
+    let payload = response.data.data;
+    // Get token from local storage
+    console.log("iniapa", payload)
+
+    payload.token = localStorage.token;
+
+    if (response.data.data.role === 'admin' ) {
+      // navigate('/TransactionList');
+      // window.location.href = '/TransactionList';
+      setNavbarProfile(true);
+      setAdminLogin(true);
+      setShowLoginModal(false);
+      console.log("admin")
+    } else {
+      setIdUserLogin(response.data.data.id)
+      // navigate('/');
+      setNavbarProfile(true);
+      setUserLogin(true);
+      console.log("user")
+    }
+
+    setIsLoading(false)
+
+  } catch (error) {
+    setIsLoading(false)
+  }
+};
+
   return (
     <Router>
       <Container style={{maxWidth:'1440px', maxheight:'3000px', padding:'0px', position:'relative'}}>
@@ -38,6 +106,7 @@ function App() {
             <Route exact path="/TransactionList" element={<Transaction/>} />
             <Route exact path="/IncomeTrip" element={<IncomeTripAdmin/>} />
             <Route exact path="/AddTripForm" element={<AddTripForm/>} />
+            <Route exact path="/UpdateTripForm/:id" element={<UpdateTripForm/>} />
             <Route exact path="/AddCountryForm" element={<AddCountryForm/>} />
           </Route>
 

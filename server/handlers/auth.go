@@ -66,8 +66,8 @@ func (h *handlerAuth) Login(c echo.Context) error {
 	}
 
 	user := models.User{
-		Email:    request.Email,
-		Password: request.Password,
+		Email:    c.FormValue("email"),
+		Password: c.FormValue("password"),
 	}
 
 	// Check email
@@ -94,10 +94,22 @@ func (h *handlerAuth) Login(c echo.Context) error {
 	}
 
 	loginResponse := authdto.LoginResponse{
+		ID:       user.ID,
+		FullName: user.FullName,
 		Email:    user.Email,
 		Password: user.Password,
+		Role:     user.Role,
 		Token:    token,
 	}
 
 	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: loginResponse})
+}
+
+func (h *handlerAuth) CheckAuth(c echo.Context) error {
+	userLogin := c.Get("userLogin")
+	userId := userLogin.(jwt.MapClaims)["id"].(float64)
+
+	user, _ := h.AuthRepository.CheckAuth(int(userId))
+
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: user})
 }

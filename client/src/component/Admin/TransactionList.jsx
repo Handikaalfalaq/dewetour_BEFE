@@ -44,7 +44,7 @@ function TransactionList() {
             <div className="transactionLish">{item.BuktiTransfer}</div>
 
             
-            <div className="transactionLish">
+            <div className="transactionLish" >
               {item.StatusPayment === "Approve" ? (
                 <div className="transactionLish" style={{ color: '#0ACF83', border:'0px'}}>{item.StatusPayment}</div>
               ) : item.StatusPayment === "Pending" ? (

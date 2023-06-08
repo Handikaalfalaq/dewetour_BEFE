@@ -50,7 +50,7 @@ function FormAddCountry() {
 
       <Form.Group className="mb-3">
         <Form.Label>Country</Form.Label>
-        <Form.Control name="Name" onChange={handleChange} style={{ width: '1204px' }} />
+        <Form.Control name="Name" onChange={handleChange} style={{ width: '1204px' }} required/>
       </Form.Group>
 
       <Button type="submit" style={{ width: '150px', position: 'absolute', left: '650px', bottom: '10px', backgroundColor: '#FFAF00', border: '0px' }}>Submit</Button>

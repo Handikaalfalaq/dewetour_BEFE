@@ -40,34 +40,6 @@ func (h *handler) GetUserById(c echo.Context) error {
 	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: user})
 }
 
-// func (h *handler) CreateNewUser(c echo.Context) error {
-// 	request := new(usersdto.CreateUserRequest)
-// 	if err := c.Bind(request); err != nil {
-// 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-// 	}
-
-// 	validation := validator.New()
-// 	err := validation.Struct(request)
-// 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-// 	}
-
-// 	user := models.User{
-// 		FullName: request.FullName,
-// 		Email:    request.Email,
-// 		Password: request.Password,
-// 		Phone:    request.Phone,
-// 		Address:  request.Address,
-// 	}
-
-// 	data, err := h.UserRepository.CreateUser(user)
-// 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{Code: http.StatusInternalServerError, Message: err.Error()})
-// 	}
-
-// 	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponse(data)})
-// }
-
 func (h *handler) UpdateDataUser(c echo.Context) error {
 	request := new(usersdto.UpdateUserRequest)
 	if err := c.Bind(&request); err != nil {

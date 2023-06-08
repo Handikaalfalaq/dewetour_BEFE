@@ -1,28 +1,28 @@
 import FolderImage from "../img/FolderImg"
 import '../assets/Index.css'
-import DataTour from '../assets/DataDetailTour'
+// import DataTour from '../assets/DataDetailTour'
 import { useParams } from "react-router-dom";
 import { DataContext } from "../../context/dataContext";
 import { useContext, useState} from "react";
+import {useQuery} from 'react-query';
+import { API } from '../../config/api';
 import Modal from 'react-bootstrap/modal';
 
 function Payment () {
+    const number = useParams("id")
+    const {data: dataAllTrip}= useQuery("dataAllTripCache", async () => {
+        const response = await API.get("/trip")
+        return response.data.data
+    })
+    
     const {total, amount, dateBooking, setDataBooking, paySukses, setPaySukses, setAppearancePay} = useContext(DataContext);
     const [payModal, setPayModal] = useState(false);
-    
-    const {id} = useParams()
-    const DataSlice = DataTour[id].InformationTrip.slice(0, 2).concat(DataTour[id].InformationTrip.slice(3))
-    const DataFilter = [DataSlice[3],DataSlice[2], DataSlice[0], DataSlice[1]]
     
     const handlePay = () => {
         setPayModal(true);
         setDataBooking(
             { 
-                id : id,
-                time : DataTour[id].Time,
-                destination: DataTour[id].Destination ,
-                country: DataTour[id].Country,
-                dataTrip: DataFilter,
+                id : number.id,
                 amount : amount,
                 total : total,
             }
@@ -43,9 +43,10 @@ function Payment () {
                     <div style={{display: 'grid', gridTemplateColumns: 'auto auto'}}>
                         <div style={{gridColumn: 'span 2'}}><img src={FolderImage.Icon} alt="icon" style={{ height: '68px'}} /></div>
                         <div>
+                        {/* {item.day}D/{item.night}N {item.title} */}
 
-                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{DataTour[id].Time} {DataTour[id].Destination}</p>
-                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{DataTour[id].Country}</p>
+                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataAllTrip[number.id].day}D/{dataAllTrip[number.id].night} {dataAllTrip[number.id].title}</p>
+                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataAllTrip[number.id].country.country}</p>
 
                             {paySukses ? (
                                 <p style={{width:'112px', height:'24px',fontSize: '12px', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color:'#FF9900'}}>Waiting Approve</p>
@@ -54,16 +55,29 @@ function Payment () {
                             )}
 
                         </div>
-                        <div style={{display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2'}}>
-                        {DataFilter.map((item, index) => {
-                            return (
-                                <div key={index}>
-                                    <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>{item[0]}</p>
-                                    <p>{item[2]}</p>
-                                </div>
-                            )})}
+                            <div style={{display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2'}}>
+                            <div>
+                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Date Trip</p>
+                                <p>{dataAllTrip[number.id].dateTrip}</p>
+                            </div>
+
+                            <div>
+                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Duration</p>
+                                <p>{dataAllTrip[number.id].day} day {dataAllTrip[number.id].night} night </p>
+                            </div>
+
+                            <div>
+                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Accomodation</p>
+                                <p>Hotel {dataAllTrip[number.id].night} Night</p>
+                            </div>
+
+                            <div>
+                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Transportation</p>
+                                <p>{dataAllTrip[number.id].transportation}</p>
+                            </div>
                         </div>
                     </div>
+
 
                     <div rowSpan="2" style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                         <p style={{fontWeight:'bold', fontSize:'36px', marginBottom:'4px'}}>Booking</p>

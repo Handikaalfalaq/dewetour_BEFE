@@ -17,10 +17,10 @@ function FotoTour (){
         const response = await API.get("/trip")
         return response.data.data
     })
-    const {total, setTotal, setAmount, setDateBooking, InputLogin, setPaySukses} = useContext(DataContext)
+    const {total, setTotal, setAmount, setDateBooking, setPaySukses, userLogin} = useContext(DataContext)
+    const number = useParams("id")
     const [modalImage, setmodalImage] = useState(false);
 
-    const number = useParams("id")
     const navigate = useNavigate()
     const [calculation, setCalculation] = useState(1);
     const handlePlusClick = () => {
@@ -48,11 +48,16 @@ function FotoTour (){
     setDateBooking(formattedDate);
     };
 
-    const handleDouble = () =>{
+    const handleBooking = () =>{
         handleDate();
-        if (InputLogin === true) {
+        if (userLogin === true) {
         navigate('/Payment/' + number.id);
-        setPaySukses(false)
+        setPaySukses(false);
+
+
+
+
+        
     } else {
         alert('Harus Login Terlebih Dahulu')
     }}
@@ -164,7 +169,7 @@ function FotoTour (){
                     <div>IDR.{total.toLocaleString()}</div>
                 </div>
                 <div style={{display:'flex', justifyContent: 'flex-end'}}>
-                    <button className='buttonBooking' onClick={handleDouble}>BOOK NOW</button>
+                    <button className='buttonBooking' onClick={handleBooking}>BOOK NOW</button>
                 </div>
             </div>
 

@@ -25,7 +25,7 @@ function FormAddTrip() {
       dateTrip:'',
       price:'',
       quotaMax:'',
-      quotaFilled:'',
+      quotaFilled:1,
       description:'',
       image:''
     })
@@ -42,14 +42,12 @@ function FormAddTrip() {
         try {
           e.preventDefault();
 
-          // Configuration
           const config = {
             headers: {
               'Content-type': 'multipart/form-data',
             },
           };
     
-          // Store data with FormData as object
           const formData = new FormData();
           formData.set('title', formTrip.title);
           formData.set('country_id', formTrip.country);
@@ -67,6 +65,7 @@ function FormAddTrip() {
           
           const response = await API.post('/trip', formData, config);
           console.log("add trip success : ", response);
+          console.log("data : ", formData);
     
           navigate('/IncomeTrip');
         } catch (error) {
@@ -75,80 +74,78 @@ function FormAddTrip() {
       });
       
     return (
-    <Form onSubmit={(e) => handleSubmit.mutate(e)} style={{padding:'108px 118px', position:'relative'}}>
-        <div style={{fontSize:'36px', marginBottom:'42px'}}>Add Trip</div>
-        <Form.Group className="mb-3">
-            <Form.Label>Title Trip</Form.Label>
-            <Form.Control name="title" onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
+      <div>
+        <div style={{ color:'red', fontSize:"30px"}}>X</div>
+        <Form onSubmit={(e) => handleSubmit.mutate(e)} style={{padding:'108px 118px', position:'relative'}}>
+            <div style={{fontSize:'36px', marginBottom:'42px'}}>Add Trip</div>
+            <Form.Group className="mb-3">
+                <Form.Label>Title Trip</Form.Label>
+                <Form.Control name="title" onChange={handleChange} style={{width:'1204px'}} required/>
+            </Form.Group>
+            
+            <Form.Group className="mb-3">
+                <Form.Label>Country</Form.Label>
+                <Form.Select onChange={handleChange} name="country" style={{width:'1204px'}}>
+                    <option>Select Country</option>
+                  {dataCountry?.map((item, index) => {
+                    return (
+                    <option key={index} value={item.id_country} >{item.country}</option>
+                    );
+                  })}
+                </Form.Select>
+            </Form.Group> 
+
+            <Form.Group className="mb-3">
+                <Form.Label>Accomodation</Form.Label>
+                <Form.Control name="accomodation"  onChange={handleChange} style={{width:'1204px'}} required/>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Transportation</Form.Label>
+                <Form.Control name="transportation"  onChange={handleChange} style={{width:'1204px'}} required/>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Eat</Form.Label>
+                <Form.Control name="eat"  onChange={handleChange} style={{width:'1204px'}} required/>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Duration</Form.Label>
+                <div style={{display:'flex'}}>
+                    <Form.Control type="number" name="day"  onChange={handleChange}  style={{width:'228px'}} required/> Days
+                    <Form.Control type="number" name="night"  onChange={handleChange} style={{width:'228px'}} required/> Night
+                </div>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Date Trip</Form.Label>
+                <Form.Control type="date" name="dateTrip"  onChange={handleChange} style={{width:'1204px'}} required/>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Price</Form.Label>
+                <Form.Control type="number" name="price"  onChange={handleChange} style={{width:'1204px'}} required/>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Quota Max</Form.Label>
+                <Form.Control type="number" name="quotaMax"  onChange={handleChange} style={{width:'1204px'}} required/>
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Description</Form.Label>
+                <Form.Control name="description"  onChange={handleChange} style={{width:'1204px', height:'117px'}} required/>
+            </Form.Group>
         
-        <Form.Group className="mb-3">
-            <Form.Label>Country</Form.Label>
-            <Form.Select  onChange={handleChange} name="country" style={{width:'1204px'}}>
-                <option>Select Country</option>
-               {dataCountry?.map((item, index) => {
-                return (
-                <option key={index} value={item.id_country} >{item.country}</option>
-                );
-              })}
-            </Form.Select>
-        </Form.Group> 
+            <Form.Group className="mb-3">
+                <Form.Label>Image</Form.Label>
+                <Form.Control name="image" onChange={handleChange} type="file" required/>
+            </Form.Group>
 
-        <Form.Group className="mb-3">
-            <Form.Label>Accomodation</Form.Label>
-            <Form.Control name="accomodation"  onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Transportation</Form.Label>
-            <Form.Control name="transportation"  onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Eat</Form.Label>
-            <Form.Control name="eat"  onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Duration</Form.Label>
-            <div style={{display:'flex'}}>
-                <Form.Control type="number" name="day"  onChange={handleChange}  style={{width:'228px'}}/> Days
-                <Form.Control type="number" name="night"  onChange={handleChange} style={{width:'228px'}}/> Night
-            </div>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Date Trip</Form.Label>
-            <Form.Control type="date" name="dateTrip"  onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Price</Form.Label>
-            <Form.Control type="number" name="price"  onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Quota Max</Form.Label>
-            <Form.Control type="number" name="quotaMax"  onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Quota Filled </Form.Label>
-            <Form.Control type="number" name="quotaFilled"  onChange={handleChange} style={{width:'1204px'}}/>
-        </Form.Group>
-
-        <Form.Group className="mb-3">
-            <Form.Label>Description</Form.Label>
-            <Form.Control name="description"  onChange={handleChange} style={{width:'1204px', height:'117px'}}/>
-        </Form.Group>
-    
-        <Form.Group className="mb-3">
-            <Form.Label>Image</Form.Label>
-            <Form.Control name="image" onChange={handleChange} type="file" />
-        </Form.Group>
-
-      <Button type="submit" style={{width:'150px', position:'absolute', left:'650px', bottom:'10px', backgroundColor:'#FFAF00', border:'0px'}} >Submit</Button>
-    </Form>
+          <Button type="submit" style={{width:'150px', position:'absolute', left:'650px', bottom:'10px', backgroundColor:'#FFAF00', border:'0px'}} >Submit</Button>
+        </Form>
+      </div>
     );
 }
 

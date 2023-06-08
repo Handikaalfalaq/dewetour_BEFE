@@ -12,8 +12,8 @@ function Home() {
   const {data: dataAllTrip}= useQuery("dataAllTripCache", async () => {
     const response = await API.get("/trip")
     return response.data.data
-})
-  console.log(dataAllTrip)
+    })
+
   const navigate = useNavigate()
   return (
       <Container className='inihome' style={{ position:'relative', maxWidth:'1440px', height:'auto', paddingBottom:'100px'}}>
@@ -47,17 +47,17 @@ function Home() {
             {dataAllTrip?.map((item, index) => {
                     return (
                     <Card key={index} style={{borderRadius:"10px", padding:"10px", width:'350px', height:'350px'}} onClick={(e) => {
-                navigate(`/DetailTour/${index}`)
-              }}>
+                      navigate(`/DetailTour/${index}`)
+                    }}>
                         <div style={{display:'flex', alightItem: 'center', justifyContent:'center',position:'relative', padding:'0px'}}>
                         <div style={{backgroundImage:`url(${item?.image})`, backgroundSize:'cover', width:'328px', height:'241px', borderRadius:'10px'}}></div>
                         <div className='date'>{item.quotaFilled} / {item.quotaMax}</div>
                         </div>
 
-                        <div className='destination'> {item.title}</div>
+                        <div className='destination'>{item.day}D/{item.night}N {item.title}</div>
 
                         <div style={{display:'flex', justifyContent:'space-between', marginTop:'10px'}}>
-                            <div style={{color:"#FFAF00", fontWeight:"bold"}}>{item.price.toLocaleString()}</div>
+                            <div style={{color:"#FFAF00", fontWeight:"bold"}}>Rp.{item.price.toLocaleString()}</div>
                             <div style={{color:"#878787"}}>{item.country.country}</div>
                         </div>
                     </Card>
