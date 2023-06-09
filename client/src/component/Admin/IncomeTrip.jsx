@@ -62,8 +62,9 @@ function IncomeTrip () {
                         </div>
 
                         <div style={{display:'flex', width:'100%', justifyContent:'space-between', marginTop:'10px'}}>
-                            <div style={{border:'1px solid black', backgroundColor:'black',color:'yellow', padding:'2px 10px', borderRadius:'10px', cursor:'pointer'}} onClick={(e) => {
-                            navigate(`/UpdateTripForm/${item.id}`)}} >Update</div>
+                            <div style={{border:'1px solid black', backgroundColor:'black',color:'yellow', padding:'2px 10px', borderRadius:'10px', cursor:'pointer'}} >Update</div>
+                            {/* <div style={{border:'1px solid black', backgroundColor:'black',color:'yellow', padding:'2px 10px', borderRadius:'10px', cursor:'pointer'}} onClick={(e) => {
+                            navigate(`/UpdateTripForm/${item.id}`)}} >Update</div> */}
                             <div style={{border:'1px solid black', backgroundColor:'black',color:'red', padding:'2px 10px', borderRadius:'10px', cursor:'pointer'}}  onClick={() => {setConfirdelete(true)
                                 }} >Delete</div>
                         </div>

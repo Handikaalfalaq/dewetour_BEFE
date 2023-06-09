@@ -44,7 +44,6 @@ function App() {
     if (token != null) {
       setAuthToken(token)
         checkUser()
-        console.log("benar")
     } else {
       setIsLoading(false)
     }
@@ -53,16 +52,12 @@ function App() {
   const checkUser = async () => {
   try { 
     const response = await API.get('/check-auth');
-    // Get user data
     let payload = response.data.data;
-    // Get token from local storage
-    console.log("iniapa", payload)
 
     payload.token = localStorage.token;
 
     if (response.data.data.role === 'admin' ) {
       // navigate('/TransactionList');
-      // window.location.href = '/TransactionList';
       setNavbarProfile(true);
       setAdminLogin(true);
       setShowLoginModal(false);

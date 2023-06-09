@@ -2,7 +2,8 @@ import { Card } from "react-bootstrap"
 import DataTour from "./assets/DataDetailTour"
 import './assets/Index.css'
 import { useParams } from "react-router-dom";
-import React, {useState , useEffect, useContext} from 'react'
+import React, {useState , useEffect, useContext, useRef} from 'react'
+import { useMutation } from 'react-query';
 import FolderImage from './img/FolderImg'
 import { useNavigate} from 'react-router-dom';
 import { DataContext } from "../context/dataContext";
@@ -10,6 +11,7 @@ import Modal from 'react-bootstrap/modal';
 import Carousel from 'react-bootstrap/Carousel';
 import {useQuery} from 'react-query';
 import { API } from '../config/api';
+import Form from 'react-bootstrap/Form';
 const dataHidden = DataTour.length - 3;
 
 function FotoTour (){
@@ -17,9 +19,12 @@ function FotoTour (){
         const response = await API.get("/trip")
         return response.data.data
     })
-    const {total, setTotal, setAmount, setDateBooking, setPaySukses, userLogin} = useContext(DataContext)
+    const {  userLogin} = useContext(DataContext)
     const number = useParams("id")
     const [modalImage, setmodalImage] = useState(false);
+    const [modalForm, setModalForm] = useState(false);
+    const [modalInformasi, setModalInformasi] = useState(false);
+    const [modalLogin, setModalLogin] = useState(false);
 
     const navigate = useNavigate()
     const [calculation, setCalculation] = useState(1);
@@ -33,37 +38,107 @@ function FotoTour (){
         }
     };
 
+    const formattedDate = useRef('');
     useEffect(() => {
-        setAmount(calculation);
-        setTotal(dataAllTrip[number.id].price * calculation);
-      }, [calculation, number.id, setTotal, setAmount, dataAllTrip]);
-      
-    const handleDate = () => {
-        const date = new Date();
-        const formattedDate = date.toLocaleString('default', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric'
-          });
-    setDateBooking(formattedDate);
-    };
+        const amount = calculation;
+        const total = dataAllTrip[number.id].price * calculation;
 
-    const handleBooking = () =>{
+        const handleDate = () => {
+            const currentDate = new Date();
+            formattedDate.current = currentDate.toLocaleString('default', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
+        };
+
         handleDate();
+
+        setFormTransaction((prevFormTransaction) => ({
+            ...prevFormTransaction,
+            amount: amount,
+            total: total,
+            date: formattedDate.current,
+        }));
+    }, [calculation, number.id, dataAllTrip]);
+
+
+    const handleBooking =() => {
         if (userLogin === true) {
-        navigate('/Payment/' + number.id);
-        setPaySukses(false);
-
-
-
-
-        
+        setModalForm(true)
     } else {
-        alert('Harus Login Terlebih Dahulu')
+        setModalLogin(true);
     }}
 
+    const handleCloseForm =() => {
+        if (userLogin === true) {
+            setModalForm(false)
+        } else {
+            setModalLogin(true)
+        }
+    }
+
+    const [formTransaction, setFormTransaction] = useState({
+        idTrip: number.id,
+        amount: '',
+        total:'',
+        date:'',
+        customerName: '',
+        customerGender: '',
+        customerPhone: '',
+      })
+      console.log("coba",formTransaction)
+
+      const handleChange = (e) => {
+        setFormTransaction({
+          ...formTransaction,
+          [e.target.name]: e.target.value,
+        });
+      };
+
+      const handleSubmit = useMutation(async (e) => {
+        try {
+        //   e.preventDefault();
+        const data = JSON.stringify(formTransaction)
+
+        //   const formData = new FormData();
+        //   formData.set('idTrip', formTransaction.idTrip);
+        //   formData.set('amount', formTransaction.amount);
+        //   formData.set('total', formTransaction.total);
+        //   formData.set('date', formTransaction.date);
+        //   formData.set('customerName', formTransaction.customerName);
+        //   formData.set('customerGender', formTransaction.customerGender);
+        //   formData.set('customerPhone', formTransaction.customerPhone);
+          
+          const response = await API.post('/transaction', data);
+
+          console.log("add transaction success : ", response);
+    
+          navigate('/Payment/' + number.id);
+          console.log("paymen", number.id)
+        } catch (error) {
+          console.log("add trip failed : ", error);
+        }
+      });
+
+    const hadleForm = () =>{
+        if (formTransaction.customerName.trim() === '' || formTransaction.customerGender === '' || formTransaction.customerPhone.trim() === '') {
+            setModalInformasi(true)
+            setModalForm(false)
+        } else {
+            setModalForm(false)
+            handleSubmit.mutate()
+        }}
+
+    const handleModalInformasi =() => {
+        setModalInformasi(false)
+        setModalForm(true)
+    }
     const handleOpenImage = () => {
         setmodalImage(true)
+    }
+    const handleModalLogin = () => {
+        setModalLogin(false)
     }
 
     const handleCloseImage = () => {
@@ -72,7 +147,7 @@ function FotoTour (){
     
     return(
         <>
-            <Card className="containerFotoTour">
+            <Card className="containerFotoTour" >
                 <div className="titleFotoTour">{dataAllTrip[number.id].title}</div>
                 <p className="destinationFotoTour">{dataAllTrip[number.id].country.country}</p>
 
@@ -166,7 +241,7 @@ function FotoTour (){
                 </div>
                 <div className='price'>
                     <div>Total :</div>
-                    <div>IDR.{total.toLocaleString()}</div>
+                    <div>IDR.{formTransaction.total.toLocaleString()}</div> 
                 </div>
                 <div style={{display:'flex', justifyContent: 'flex-end'}}>
                     <button className='buttonBooking' onClick={handleBooking}>BOOK NOW</button>
@@ -183,10 +258,49 @@ function FotoTour (){
                     </Carousel.Item>
                     )
                 })}
-
                 </Carousel>
             </Modal>
-        </>
+
+            <Modal show={modalForm} onHide={handleCloseForm} display={{alignItems:'center'}}>
+                <div style={{backgroundColor:'white', width:'550px', height:'350px', display:'flex', justifyContent:'center', alignItems:'center', borderRadius:'5px'}}>
+                <form style={{width:'500px', height:'300px', margin:'auto'}}>  
+                    <Form.Group className="mb-3">
+                        <Form.Label>Customer name</Form.Label>
+                        <Form.Control name="customerName" onChange={handleChange} type="text" className="form-control" placeholder="Nama Pemesan" required/>
+                    </Form.Group>
+
+                    <Form.Group className="form-group" style={{margin:'10px 0px'}}> 
+                        <Form.Label>Customer Gender</Form.Label>
+                        <div style={{display:'flex' , flexDirection:'row'}}> 
+                            <Form.Label style={{}}>Male</Form.Label>
+                            <Form.Check onChange={handleChange} type="radio" name="customerGender" value="male" required/>
+                            <Form.Label style={{marginLeft:'10px'}}>Female</Form.Label>
+                            <Form.Check onChange={handleChange} type="radio" name="customerGender" value="female" required/> 
+                        </div>
+                    </Form.Group>
+                    
+                    <div className="form-group">
+                        <Form.Label>Customer Phone</Form.Label>
+                        <Form.Control name="customerPhone" onChange={handleChange} type="text" className="form-control" placeholder="Phone Pemesan" required/>
+                    </div>
+                    
+                    <div style={{display:'flex', justifyContent:'space-around', marginTop:'20px'}}>
+                        <div style={{ backgroundColor:'green', height:'30px', width:'70px', cursor:'pointer', textAlign:'center', fontWeight:'bold', color:'white', borderRadius:'10px'}} onClick={hadleForm}>Ok</div>
+                        <div style={{ backgroundColor:'red', height:'30px', width:'70px', cursor:'pointer', textAlign:'center', fontWeight:'bold', color:'white', borderRadius:'10px'}} onClick={handleCloseForm}>Cancel</div>
+                    </div>
+                </form>
+                </div>
+            </Modal>
+
+            <Modal show={modalInformasi} onHide={handleModalInformasi} display={{alignItems:'center'}}>
+                    <div style={{display:'flex', margin:'auto', color:'red', fontSize:'20px'}}>Mohon lengkapi terlebih dahulu semua data</div>
+            </Modal> 
+
+            <Modal show={modalLogin} onHide={handleModalLogin} display={{alignItems:'center'}}>
+                <div style={{display:'flex', margin:'auto', color:'red', fontSize:'20px'}}>Sebelum Melakukan booking</div>
+                <div style={{display:'flex', margin:'auto', color:'red', fontSize:'20px'}}>Harus Login Terlebih Dahulu</div>
+            </Modal> 
+        </> 
     )
 }
 

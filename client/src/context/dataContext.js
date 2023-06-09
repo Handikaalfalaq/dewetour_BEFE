@@ -34,7 +34,6 @@ export const DataContext = createContext();
 export const DataProvider = ({children}) => {
     // const [state, dispatch] = useReducer(reducer, initialState);
     const [dataUserLogin, setDataUserLogin] = useState([]);
-    const [total, setTotal] = useState('');
     const [amount, setAmount] = useState('1');
     const [dateBooking, setDateBooking] = useState('Belum ada tanggal');
     const [formLogin, setFormLogin] = useState([]);
@@ -51,7 +50,7 @@ export const DataProvider = ({children}) => {
     // console.log("ini state",state)
 
     return (
-        <DataContext.Provider value={{ dataUserLogin, setDataUserLogin, total, setTotal, amount, setAmount, dateBooking, setDateBooking, userLogin, setUserLogin, dataBooking, setDataBooking, paySukses, setPaySukses, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
+        <DataContext.Provider value={{ dataUserLogin, setDataUserLogin, amount, setAmount, dateBooking, setDateBooking, userLogin, setUserLogin, dataBooking, setDataBooking, paySukses, setPaySukses, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
             {children}
         </DataContext.Provider>
 

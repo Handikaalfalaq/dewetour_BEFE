@@ -31,6 +31,3 @@ type TransactionResponse struct {
 func (TransactionResponse) TableName() string {
 	return "trans"
 }
-
-
-	

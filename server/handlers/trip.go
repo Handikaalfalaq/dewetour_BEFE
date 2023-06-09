@@ -105,10 +105,11 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 }
 
 func (h *handlerTrip) UpdateDataTrip(c echo.Context) error {
+	dataFileUpdate := c.Get("dataFile").(string)
 	request := new(tripdto.UpdateTripRequest)
-	if err := c.Bind(&request); err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-	}
+	// if err := c.Bind(&request); err != nil {
+	// 	return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
+	// }
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	trip, err := h.TripRepository.GetUpdateId(id)
@@ -125,57 +126,67 @@ func (h *handlerTrip) UpdateDataTrip(c echo.Context) error {
 			Message: err.Error()})
 	}
 
-	if request.Title != "" {
-		trip.Title = request.Title
+	var title = c.FormValue("title")
+	if title != "" {
+		trip.Title = title
 	}
 
-	if request.CountryId != 0 {
-		trip.CountryId = request.CountryId
-	}
-
-	if request.Accomodation != "" {
-		trip.Accomodation = request.Accomodation
-	}
-
+	// var country = c.FormValue("country")
 	trip.Country = countries
 
-	if request.Transportation != "" {
-		trip.Transportation = request.Transportation
+	var accomodation = c.FormValue("accomodation")
+	if accomodation != "" {
+		trip.Accomodation = accomodation
 	}
 
-	if request.Eat != "" {
-		trip.Eat = request.Eat
+	var transportation = c.FormValue("transportation")
+	if transportation != "" {
+		trip.Transportation = transportation
 	}
 
-	if request.Day != 0 {
-		trip.Day = request.Day
+	var eat = c.FormValue("eat")
+	if eat != "" {
+		trip.Eat = eat
 	}
 
-	if request.Night != 0 {
-		trip.Night = request.Night
+	var day, _ = strconv.Atoi(c.FormValue("day"))
+	if day != 0 {
+		trip.Day = day
 	}
 
-	if request.DateTrip != "" {
-		trip.DateTrip = request.DateTrip
-	}
-	if request.Price != 0 {
-		trip.Price = request.Price
+	var night, _ = strconv.Atoi(c.FormValue("night"))
+	if night != 0 {
+		trip.Night = night
 	}
 
-	if request.QuotaMax != 0 {
-		trip.QuotaMax = request.QuotaMax
+	var dateTrip = c.FormValue("dateTrip")
+	if dateTrip != "" {
+		trip.DateTrip = dateTrip
 	}
 
-	if request.QuotaFilled != 0 {
-		trip.QuotaFilled = request.QuotaFilled
+	var price, _ = strconv.Atoi(c.FormValue("price"))
+	if price != 0 {
+		trip.Price = price
 	}
 
-	if request.Description != "" {
-		trip.Description = request.Description
+	var quotaMax, _ = strconv.Atoi(c.FormValue("quotaMax"))
+	if quotaMax != 0 {
+		trip.QuotaMax = quotaMax
 	}
 
-	if request.Image != "" {
-		trip.Image = request.Image
+	var quotaFilled, _ = strconv.Atoi(c.FormValue("quotaFilled"))
+	if quotaFilled != 0 {
+		trip.QuotaFilled = quotaFilled
+	}
+
+	var description = c.FormValue("description")
+	if description != "" {
+		trip.Description = description
+	}
+
+	var dataFile = dataFileUpdate
+	if dataFile != "" {
+		trip.Image = dataFile
 	}
 
 	data, err := h.TripRepository.UpdateTrip(trip)
@@ -206,7 +217,7 @@ func convertResponseTrip(u models.Trip) tripdto.TripResponse {
 	return tripdto.TripResponse{
 		Id:    u.Id,
 		Title: u.Title,
-		// CountryId:      u.CountryId,
+		CountryId:      u.CountryId,
 		// Country:        u.Country,
 		Accomodation:   u.Accomodation,
 		Transportation: u.Transportation,

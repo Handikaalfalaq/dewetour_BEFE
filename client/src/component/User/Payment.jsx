@@ -15,7 +15,7 @@ function Payment () {
         return response.data.data
     })
     
-    const {total, amount, dateBooking, setDataBooking, paySukses, setPaySukses, setAppearancePay} = useContext(DataContext);
+    const {total, amount, setDataBooking, paySukses, setPaySukses, setAppearancePay} = useContext(DataContext);
     const [payModal, setPayModal] = useState(false);
     
     const handlePay = () => {
@@ -46,6 +46,7 @@ function Payment () {
                         {/* {item.day}D/{item.night}N {item.title} */}
 
                             <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataAllTrip[number.id].day}D/{dataAllTrip[number.id].night} {dataAllTrip[number.id].title}</p>
+
                             <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataAllTrip[number.id].country.country}</p>
 
                             {paySukses ? (
@@ -81,7 +82,7 @@ function Payment () {
 
                     <div rowSpan="2" style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                         <p style={{fontWeight:'bold', fontSize:'36px', marginBottom:'4px'}}>Booking</p>
-                        <p style={{margin:'0px'}}>{dateBooking}</p>
+                        {/* <p style={{margin:'0px'}}>{dateBooking}</p> */}
                         <img style={{margin:'20px 0px 13px'}} src={FolderImage.Nota} alt="" />
                         <p style={{fontSize:'13px', color:'#818181', margin:'0px'}}>Upload payment proof</p>
                     </div>
@@ -110,7 +111,8 @@ function Payment () {
                         <div></div>
                         <div></div>
                         <div>Total</div>
-                        <div style={{color:'red', border:'0px'}}>: IDR.{total.toLocaleString()}</div>
+                        <div style={{color:'red', border:'0px'}}>: IDR.</div>
+                        {/* <div style={{color:'red', border:'0px'}}>: IDR.{total.toLocaleString()}</div> */}
                     </div>
                     
                     {paySukses ? (

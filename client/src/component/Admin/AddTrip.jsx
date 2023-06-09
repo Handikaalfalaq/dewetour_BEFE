@@ -38,40 +38,40 @@ function FormAddTrip() {
         });
       };
 
-      const handleSubmit = useMutation(async (e) => {
-        try {
-          e.preventDefault();
+    const handleSubmit = useMutation(async (e) => {
+      try {
+        e.preventDefault();
 
-          const config = {
-            headers: {
-              'Content-type': 'multipart/form-data',
-            },
-          };
-    
-          const formData = new FormData();
-          formData.set('title', formTrip.title);
-          formData.set('country_id', formTrip.country);
-          formData.set('accomodation', formTrip.accomodation);
-          formData.set('transportation', formTrip.transportation);
-          formData.set('eat', formTrip.eat);
-          formData.set('day', formTrip.day);
-          formData.set('night', formTrip.night);
-          formData.set('dateTrip', formTrip.dateTrip);
-          formData.set('price', formTrip.price);
-          formData.set('quotaMax', formTrip.quotaMax);
-          formData.set('quotaFilled', formTrip.quotaFilled);
-          formData.set('description', formTrip.description);
-          formData.append('image', formTrip.image[0], formTrip.image[0].name);
-          
-          const response = await API.post('/trip', formData, config);
-          console.log("add trip success : ", response);
-          console.log("data : ", formData);
-    
-          navigate('/IncomeTrip');
-        } catch (error) {
-          console.log("add trip failed : ", error);
-        }
-      });
+        const config = {
+          headers: {
+            'Content-type': 'multipart/form-data',
+          },
+        };
+  
+        const formData = new FormData();
+        formData.set('title', formTrip.title);
+        formData.set('country_id', formTrip.country);
+        formData.set('accomodation', formTrip.accomodation);
+        formData.set('transportation', formTrip.transportation);
+        formData.set('eat', formTrip.eat);
+        formData.set('day', formTrip.day);
+        formData.set('night', formTrip.night);
+        formData.set('dateTrip', formTrip.dateTrip);
+        formData.set('price', formTrip.price);
+        formData.set('quotaMax', formTrip.quotaMax);
+        formData.set('quotaFilled', formTrip.quotaFilled);
+        formData.set('description', formTrip.description);
+        formData.append('image', formTrip.image[0], formTrip.image[0].name);
+        
+        const response = await API.post('/trip', formData, config);
+        console.log("add trip success : ", response);
+        console.log("data : ", formData);
+  
+        navigate('/IncomeTrip');
+      } catch (error) {
+        console.log("add trip failed : ", error);
+      }
+    });
       
     return (
       <div>
