@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import FolderImage from '../img/FolderImg';
 import { DataContext } from "../../context/dataContext";
 import { useMutation } from 'react-query';
-import { API } from '../../config/api';
+import { API, setAuthToken  } from '../../config/api';
 import { useNavigate } from 'react-router-dom';
 import { Alert } from 'react-bootstrap';
 import '../assets/Index.css'
@@ -12,15 +12,13 @@ import '../assets/Index.css'
 
 function FormLogin({openRegister}) {
   let navigate = useNavigate();
-  const {message, setMessage, setNavbarProfile, setUserLogin, setAdminLogin, setShowLoginModal, setIdUserLogin, dataUserLogin, setDataUserLogin} = useContext(DataContext)
+  const {dispatch, message, setMessage, setNavbarProfile, setUserLogin, setAdminLogin, setShowLoginModal, setIdUserLogin} = useContext(DataContext)
 
   const [formLogin, setFormLogin] = useState({
     email: '',
     password: '',
   });
   
-  console.log(formLogin)
-
   const handleChange = (e) => {
     setFormLogin({
       ...formLogin,
@@ -33,28 +31,51 @@ function FormLogin({openRegister}) {
       e.preventDefault();
 
       const formData = new FormData();
-      formData.set('email', formLogin.email);
-      formData.set('password', formLogin.password);
+      formData.set('email', formLogin.email)
+      formData.set('password', formLogin.password)
 
+      // const formLoginUser = JSON.stringify(formLogin)
+      // console.log("user", formLoginUser)
       const response = await API.post('/login', formData);
-      setDataUserLogin(response.data.data)
-      console.log("ada", dataUserLogin)
-      // console.log(response)
+      // const formData = new FormData();
+      // formData.set('email', formLogin.email);
+      // formData.set('password', formLogin.password);
+      dispatch({
+        type: 'LOGIN_SUCCESS',
+        payload: response.data.data,
+      });
+
+      setAuthToken(localStorage.token);
       
+        if (response.data.data.role === 'admin') {
+          navigate('/TransactionList');
+          setNavbarProfile(true);
+          setAdminLogin(true);
+          setShowLoginModal(false);
+        } else if (response.data.data.role === 'user') {
+          setIdUserLogin(response.data.data.id)
+          navigate('/');
+          setNavbarProfile(true);
+          setUserLogin(true);
+          setShowLoginModal(false);
+        } else {
+          console.log("salah")
+        }
+
       localStorage.setItem("token", response.data.data.token);
 
-      if (response.data.data.role === 'admin' ) {
-        navigate('/TransactionList');
-        setNavbarProfile(true);
-        setAdminLogin(true);
-        setShowLoginModal(false);
-      } else {
-        setIdUserLogin(response.data.data.id)
-        navigate('/');
-        setNavbarProfile(true);
-        setUserLogin(true);
-        setShowLoginModal(false);
-      }
+      // if (response.data.data.role === 'admin' ) {
+      //   navigate('/TransactionList');
+      //   setNavbarProfile(true);
+      //   setAdminLogin(true);
+      //   setShowLoginModal(false);
+      // } else {
+      //   setIdUserLogin(response.data.data.id)
+      //   navigate('/');
+      //   setNavbarProfile(true);
+      //   setUserLogin(true);
+      //   setShowLoginModal(false);
+      // }
     } catch (error) {
       const alert = (
         <Alert variant="danger" className="py-1">

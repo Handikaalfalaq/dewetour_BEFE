@@ -29,9 +29,7 @@ function IncomeTrip () {
               refetch();
             }
       });
-      console.log("ini datanya", dataAllTrip);
-      console.log("ini datanya", dataAllTrip[0].id);
-
+      console.log("datatrip", dataAllTrip)
     return (
         <Container style={{ position:'relative', maxWidth:'1440px', height:'auto', backgroundColor:'white', padding:'100px', }}>
             <div>
@@ -57,7 +55,7 @@ function IncomeTrip () {
                         <div className='destination'>{item.day}D/{item.night}N {item.title}</div>
 
                         <div style={{display:'flex', justifyContent:'space-between', marginTop:'10px'}}>
-                            <div style={{color:"#FFAF00", fontWeight:"bold"}}>Rp.{item.price.toLocaleString()}</div>
+                            <div style={{color:"#FFAF00", fontWeight:"bold"}}>Rp.{(item.price * item.quotaFilled).toLocaleString()}</div>
                             <div style={{color:"#878787"}}>{item.country.country}</div>
                         </div>
 

@@ -94,7 +94,7 @@ function Navbars() {
                   </NavDropdown.Item>
                 </NavDropdown>
               ) : (adminLogin === true) ? (
-                <NavDropdown className='fotoprofil' style={{ backgroundImage: `url(${FolderImage.FotoProfil})`}}>
+                <NavDropdown className='fotoprofil' style={{ backgroundImage: `url(${FolderImage.fotoAdmin})`}}>
                   <NavDropdown.Item style={{ backgroundColor: 'white', borderRadius: '5px', padding: '20px 0px 20px'}}>
                     <div onClick={() => navigate('/IncomeTrip')} style={{display:'flex', textDecoration: 'none', color: 'black', paddingLeft: '30px', marginBottom: '15px'}}>
                       <div><img src={FolderImage.Trip} alt="icon trip" /></div>

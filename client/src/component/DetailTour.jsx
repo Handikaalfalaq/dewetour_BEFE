@@ -21,6 +21,15 @@ function FotoTour (){
     })
     const {  userLogin} = useContext(DataContext)
     const number = useParams("id")
+    // const idTrip = parseInt(number.id);
+    const idTrip = dataAllTrip[number.id].id;
+
+    // console.log("type data", typeof idTrip);
+    // console.log("typeee",  number.id);
+    // console.log("type",  idTrip);
+    // console.log("data trips" , dataAllTrip[number.id]);
+    // console.log("data trips id nya" , dataAllTrip[number.id].id);
+
     const [modalImage, setmodalImage] = useState(false);
     const [modalForm, setModalForm] = useState(false);
     const [modalInformasi, setModalInformasi] = useState(false);
@@ -41,7 +50,7 @@ function FotoTour (){
     const formattedDate = useRef('');
     useEffect(() => {
         const amount = calculation;
-        const total = dataAllTrip[number.id].price * calculation;
+        const total = dataAllTrip[number.id]?.price * calculation;
 
         const handleDate = () => {
             const currentDate = new Date();
@@ -79,7 +88,7 @@ function FotoTour (){
     }
 
     const [formTransaction, setFormTransaction] = useState({
-        idTrip: number.id,
+        idTrip: idTrip,
         amount: '',
         total:'',
         date:'',
@@ -87,7 +96,6 @@ function FotoTour (){
         customerGender: '',
         customerPhone: '',
       })
-      console.log("coba",formTransaction)
 
       const handleChange = (e) => {
         setFormTransaction({
@@ -96,9 +104,16 @@ function FotoTour (){
         });
       };
 
+      console.log("keren", formTransaction);
+
       const handleSubmit = useMutation(async (e) => {
         try {
         //   e.preventDefault();
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
         const data = JSON.stringify(formTransaction)
 
         //   const formData = new FormData();
@@ -110,7 +125,7 @@ function FotoTour (){
         //   formData.set('customerGender', formTransaction.customerGender);
         //   formData.set('customerPhone', formTransaction.customerPhone);
           
-          const response = await API.post('/transaction', data);
+          const response = await API.post('/transaction', data, config);
 
           console.log("add transaction success : ", response);
     
@@ -148,13 +163,13 @@ function FotoTour (){
     return(
         <>
             <Card className="containerFotoTour" >
-                <div className="titleFotoTour">{dataAllTrip[number.id].title}</div>
-                <p className="destinationFotoTour">{dataAllTrip[number.id].country.country}</p>
+                <div className="titleFotoTour">{dataAllTrip[number.id]?.title}</div>
+                <p className="destinationFotoTour">{dataAllTrip[number.id]?.country.country}</p>
 
-                <div className="mainFotoTour" style={{backgroundImage: `url(${dataAllTrip[number.id].image})`}}></div>
+                <div className="mainFotoTour" style={{backgroundImage: `url(${dataAllTrip[number.id]?.image})`}}></div>
                 <div className="imageFotoTour"> 
 
-                {DataTour[number.id].Image.slice(1, 4).map((image, index) => {
+                {DataTour[number.id]?.Image.slice(1, 4).map((image, index) => {
                     if (index === 2) {
                         return (
                         <div key={index} className="secondaryFotoTour" style={{ backgroundImage: `url(${image})`, filter:'blur(1.5px)'}}></div>
@@ -179,7 +194,7 @@ function FotoTour (){
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Accomodation</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Calendar} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>Hotel {dataAllTrip[number.id].night} Night</p>
+                    <p style={{marginLeft:'14px'}}>Hotel {dataAllTrip[number.id]?.night} Night</p>
                 </div>
             </div>
 
@@ -187,7 +202,7 @@ function FotoTour (){
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Transportation</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Plane} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id].transportation}</p>
+                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.transportation}</p>
                 </div>
             </div>
 
@@ -195,7 +210,7 @@ function FotoTour (){
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Eat</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Meal} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id].eat}</p>
+                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.eat}</p>
                 </div>
             </div>
 
@@ -203,7 +218,7 @@ function FotoTour (){
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Duration</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Time} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id].day} day {dataAllTrip[number.id].night} night </p>
+                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.day} day {dataAllTrip[number.id]?.night} night </p>
                 </div>
             </div>
 
@@ -212,21 +227,21 @@ function FotoTour (){
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Date Trip</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Hotel} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id].dateTrip} </p>
+                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.dateTrip} </p>
                 </div>
             </div>
 
             </div>
             <div className="description">
                 <p style={{fontSize:'18px', margin:'20px 0px 7px', fontWeight:'bold'}}>Description</p>
-                <p style={{color:'#A8A8A8'}}>{dataAllTrip[number.id].description}</p>
+                <p style={{color:'#A8A8A8'}}>{dataAllTrip[number.id]?.description}</p>
             </div>
             </Card>
 
             <div className='containerPricePerson'>
                 <div className='tablePricePerson'>
                     <div style={{display:'flex'}}>
-                        <div style={{color:'#FFAF00', marginRight:'5px'}}>IDR. {dataAllTrip[number.id].price.toLocaleString()}</div>
+                        <div style={{color:'#FFAF00', marginRight:'5px'}}>IDR. {dataAllTrip[number.id]?.price.toLocaleString()}</div>
                         <div>/ Person</div>
                     </div>
                     <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
@@ -251,7 +266,7 @@ function FotoTour (){
             <Modal show={modalImage} onHide={handleCloseImage} display={{alignItems:'center'}}>
                 <Carousel style={{ backgroundColor:'transparent', maxWidth:'3000px', display:'flex', flexDirection:'columb', }}>
                 
-                {DataTour[number.id].Image.map((image,index) => {
+                {DataTour[number.id]?.Image.map((image,index) => {
                     return (
                     <Carousel.Item interval={1000} key={index}>
                         <div key={index} className="secondaryFotoTour" style={{ backgroundImage: `url(${image})`, backgroundSize:'cover', width:'500px', height:'400px', backgroundPosition: 'center', borderRadius:'10px'}}></div>

@@ -113,6 +113,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 
 	userLogin := c.Get("userLogin")
 	userId := userLogin.(jwt.MapClaims)["id"].(float64) //float64
+
 	users, err := h.TransactionRepository.GetUserId(int(userId))
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
@@ -121,15 +122,18 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 	}
 
 	transaction := models.Transaction{
-		CounterQty: request.CounterQty,
-		Total:      request.Total,
-		Status:     "Waiting Approve",
-		IdTrip:     request.IdTrip,
-		Trip:       trips,
-		IdUser:     int(userId),
-		User:       users,
-		CreatedAt:  time.Now(),
-		UpdatedAt:  time.Now(),
+		IdUser:         int(userId),
+		User:           users,
+		IdTrip:         request.IdTrip,
+		Trip:           trips,
+		Amount:         request.Amount,
+		Total:          request.Total,
+		Date:           request.Date,
+		CustomerName:   request.CustomerName,
+		CustomerGender: request.CustomerGender,
+		CustomerPhone:  request.CustomerPhone,
+		// CreatedAt:      time.Now(),
+		// UpdatedAt:      time.Now(),
 	}
 	data, err := h.TransactionRepository.CreateTransaction(transaction)
 	if err != nil {
@@ -137,7 +141,6 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 			Code:    http.StatusBadRequest,
 			Message: err.Error()})
 	}
-
 	return c.JSON(http.StatusOK, resultdto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)})
 }
 
@@ -156,22 +159,6 @@ func (h *HandlerTransactions) UpdateTransaction(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
 			Code:    http.StatusBadRequest,
 			Message: err.Error()})
-	}
-
-	if request.CounterQty != 0 {
-		transaction.CounterQty = request.CounterQty
-	}
-	if request.Total != 0 {
-		transaction.Total = request.Total
-	}
-	if request.Status != "" {
-		transaction.Status = request.Status
-	}
-	if request.Attachment != "" {
-		transaction.Attachment = request.Attachment
-	}
-	if request.IdTrip != 0 {
-		transaction.IdTrip = request.IdTrip
 	}
 
 	trips, err := h.TransactionRepository.GetTripId(request.IdTrip)
@@ -199,14 +186,16 @@ func (h *HandlerTransactions) UpdateTransaction(c echo.Context) error {
 
 func convertResponseTransaction(Transaction models.Transaction) transactiondto.TransactionResponse {
 	return transactiondto.TransactionResponse{
-		Id:         Transaction.Id,
-		CounterQty: Transaction.CounterQty,
-		Total:      Transaction.Total,
-		Status:     Transaction.Status,
-		Attachment: Transaction.Attachment,
-		IdTrip:     Transaction.IdTrip,
-		Trip:       Transaction.Trip,
-		IdUser:     Transaction.IdUser,
-		User:       Transaction.User,
+		Id:             Transaction.Id,
+		IdUser:         Transaction.IdUser,
+		User:           Transaction.User,
+		IdTrip:         Transaction.IdTrip,
+		Trip:           Transaction.Trip,
+		Amount:         Transaction.Amount,
+		Total:          Transaction.Total,
+		Date:           Transaction.Date,
+		CustomerName:   Transaction.CustomerName,
+		CustomerGender: Transaction.CustomerGender,
+		CustomerPhone:  Transaction.CustomerPhone,
 	}
 }

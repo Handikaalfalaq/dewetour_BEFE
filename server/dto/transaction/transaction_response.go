@@ -3,13 +3,15 @@ package transactiondto
 import "dumbmerch/models"
 
 type TransactionResponse struct {
-	Id         int    `json:"id_trans" form:"id_trans" gorm:"primary_key:auto_increment"`
-	CounterQty int    `json:"counter_qty" form:"counter_qty"`
-	Total      int    `json:"total" form:"total"`
-	Status     string `json:"status" form:"status"`
-	Attachment string `json:"attachment" form:"attachment"`
-	IdTrip     int    `json:"id_trip" form:"id_trip"`
-	Trip       models.TripResponse
-	IdUser     int `json:"id_user" form:"id_user"`
-	User       models.UsersProfileResponse
+	Id             int `json:"id_trans" form:"id_trans" gorm:"primary_key:auto_increment"`
+	IdUser         int `json:"idUser" form:"idUser"`
+	User           models.UsersProfileResponse
+	IdTrip         int `json:"idTrip" form:"idTrip"`
+	Trip           models.TripResponse
+	Amount         int    `json:"amount" form:"amount"`
+	Total          int    `json:"total" form:"total"`
+	Date           string `json:"date" form:"date"`
+	CustomerName   string `json:"customerName" form:"customerName"`
+	CustomerGender string `json:"customerGender" form:"customerGender"`
+	CustomerPhone  string `json:"customerPhone" form:"customerPhone"`
 }

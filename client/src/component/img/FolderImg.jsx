@@ -8,6 +8,7 @@ import AustraliaSydneyOperaHouseNight from './australiaSydneyOperaHouseNight.jpg
 import Bill from './bill.png'
 import Calendar from './calendar.png'
 import Guarantee from './guarantee.png'
+import fotoAdmin from './fotoAdmin.jpg'
 import FotoProfil from './FotoProfil.jpg'
 import Heart from './heart.png'
 import Hibiscus from './hibiscus.png'
@@ -80,6 +81,7 @@ const FolderImage = {
   Bill,
   Calendar,
   Guarantee,
+  fotoAdmin,
   FotoProfil,
   Heart,
   Hibiscus,

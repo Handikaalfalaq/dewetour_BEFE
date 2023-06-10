@@ -1,15 +1,21 @@
 package transactiondto
 
 type CreateTransaction struct {
-	CounterQty int `json:"counter_qty" form:"counter_qty" validate:"required"`
-	Total      int `json:"total" form:"total" validate:"required"`
-	IdTrip     int `json:"id_trip" form:"id_trip" validate:"required"`
+	IdTrip         int    `json:"idTrip" form:"idTrip"`
+	Total          int    `json:"total" form:"total" validate:"required"`
+	Amount         int    `json:"amount" form:"amount" validate:"required"`
+	Date           string `json:"date" form:"date" validate:"required"`
+	CustomerName   string `json:"customerName" form:"customerName" validate:"required"`
+	CustomerGender string `json:"customerGender" form:"customerGender" validate:"required"`
+	CustomerPhone  string `json:"customerPhone" form:"customerPhone" validate:"required"`
 }
 
 type UpdateTransaction struct {
-	CounterQty int    `json:"counter_qty" form:"counter_qty"`
-	Total      int    `json:"total" form:"total"`
-	Status     string `json:"status" form:"status"`
-	Attachment string `json:"attachment" form:"attachment"`
-	IdTrip     int    `json:"id_trip" form:"id_trip"`
+	IdTrip         int    `json:"idTrip" form:"idTrip" `
+	Total          int    `json:"total" form:"total" `
+	Amount         int    `json:"amount" form:"amount" `
+	Date           string `json:"date" form:"date" `
+	CustomerName   string `json:"customerName" form:"customerName" `
+	CustomerGender string `json:"customerGender" form:"customerGender" `
+	CustomerPhone  string `json:"customerPhone" form:"customerPhone" `
 }

@@ -51,13 +51,13 @@ function Home() {
                     }}>
                         <div style={{display:'flex', alightItem: 'center', justifyContent:'center',position:'relative', padding:'0px'}}>
                         <div style={{backgroundImage:`url(${item?.image})`, backgroundSize:'cover', width:'328px', height:'241px', borderRadius:'10px'}}></div>
-                        <div className='date'>{item.quotaFilled} / {item.quotaMax}</div>
+                        <div className='date'>{item.quotaMax - item.quotaFilled } remaining</div>
                         </div>
 
                         <div className='destination'>{item.day}D/{item.night}N {item.title}</div>
 
                         <div style={{display:'flex', justifyContent:'space-between', marginTop:'10px'}}>
-                            <div style={{color:"#FFAF00", fontWeight:"bold"}}>Rp.{item.price.toLocaleString()}</div>
+                            <div style={{color:"#FFAF00", fontWeight:"bold"}}>IDR.{item.price.toLocaleString()}</div>
                             <div style={{color:"#878787"}}>{item.country.country}</div>
                         </div>
                     </Card>

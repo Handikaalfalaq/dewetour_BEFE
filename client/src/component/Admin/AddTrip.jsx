@@ -75,9 +75,9 @@ function FormAddTrip() {
       
     return (
       <div>
-        <div style={{ color:'red', fontSize:"30px"}}>X</div>
         <Form onSubmit={(e) => handleSubmit.mutate(e)} style={{padding:'108px 118px', position:'relative'}}>
-            <div style={{fontSize:'36px', marginBottom:'42px'}}>Add Trip</div>
+            <div style={{fontSize:'36px'}}>Add Trip</div>
+            <div style={{ color: 'red', fontSize: "20px", marginBottom: '42px', cursor: 'pointer' }} onClick={() => navigate('/IncomeTrip')}>close</div>
             <Form.Group className="mb-3">
                 <Form.Label>Title Trip</Form.Label>
                 <Form.Control name="title" onChange={handleChange} style={{width:'1204px'}} required/>
@@ -134,9 +134,10 @@ function FormAddTrip() {
             </Form.Group>
 
             <Form.Group className="mb-3">
-                <Form.Label>Description</Form.Label>
-                <Form.Control name="description"  onChange={handleChange} style={{width:'1204px', height:'117px'}} required/>
+              <Form.Label>Description</Form.Label>
+              <Form.Control as="textarea" name="description" onChange={handleChange} style={{ width: '1204px', height: '117px' }} required />
             </Form.Group>
+
         
             <Form.Group className="mb-3">
                 <Form.Label>Image</Form.Label>

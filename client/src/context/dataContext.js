@@ -1,38 +1,38 @@
-import React, { createContext, useState} from 'react';
-
+import React, { createContext, useState, useReducer } from 'react';
+import { setAuthToken } from '../config/api';
 export const DataContext = createContext();
 
-// const initialState = {
-//   isLogin: false,
-//   user: {},
-// };
+const initialState = {
+  isLogin: false,
+  user: {},
+};
 
-// const reducer = (state, action) => {
-//   const { type, payload } = action;
-//   console.log("ini payload", payload)
+const reducer = (state, action) => {
+  const { type, payload } = action;
 
-//   switch (type) {
-//     case "USER_SUCCESS":
-//     case "LOGIN_SUCCESS":
-//       localStorage.setItem("token", payload.token);
-//       return {
-//         isLogin: true,
-//         user: payload,
-//       };
-//     case "AUTH_ERROR":
-//     case "LOGOUT":
-//       localStorage.removeItem("token");
-//       return {
-//         isLogin: false,
-//         user: {},
-//       };
-//     default:
-//       throw new Error();
-//   }
-// };
+  switch (type) {
+    case "USER_SUCCESS":
+    case "LOGIN_SUCCESS":
+      localStorage.setItem("token", payload.token);
+      setAuthToken(payload.token);
+      return {
+        isLogin: true,
+        user: payload,
+      };
+    case "AUTH_ERROR":
+    case "LOGOUT":
+      localStorage.removeItem("token");
+      return {
+        isLogin: false,
+        user: {},
+      };
+    default:
+      throw new Error();
+  }
+};
 
 export const DataProvider = ({children}) => {
-    // const [state, dispatch] = useReducer(reducer, initialState);
+    const [state, dispatch] = useReducer(reducer, initialState);
     const [dataUserLogin, setDataUserLogin] = useState([]);
     const [amount, setAmount] = useState('1');
     const [dateBooking, setDateBooking] = useState('Belum ada tanggal');
@@ -47,10 +47,9 @@ export const DataProvider = ({children}) => {
     const [message, setMessage] = useState(null);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [idUserLogin, setIdUserLogin] = useState("");
-    // console.log("ini state",state)
 
     return (
-        <DataContext.Provider value={{ dataUserLogin, setDataUserLogin, amount, setAmount, dateBooking, setDateBooking, userLogin, setUserLogin, dataBooking, setDataBooking, paySukses, setPaySukses, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
+        <DataContext.Provider value={{ state, dispatch, dataUserLogin, setDataUserLogin, amount, setAmount, dateBooking, setDateBooking, userLogin, setUserLogin, dataBooking, setDataBooking, paySukses, setPaySukses, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
             {children}
         </DataContext.Provider>
 
