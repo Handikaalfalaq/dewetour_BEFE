@@ -28,19 +28,24 @@ function TransactionList() {
   const {data: dataAllTransaction}= useQuery("dataTransactionUserCache", async () => {
     const response = await API.get("/transaction")
     return response.data.data
-  }) 
-
-  console.log("data", dataAllTransaction)
+  })
 
   return (
     <div style={{display: "flex", flexDirection: "column", width: "1440px", backgroundColor: "transparent", zIndex: "1", padding: "105px 87px 0px"}}>
-      <div style={{ fontSize: "36px" }}>Incoming Transaction</div>
+      <div style={{ fontSize: "36px", marginTop:'30px' }}>Incoming Transaction</div>
       
       <div style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gridAutoRows: "auto"}} >
+        
         {DataList.map((item, index) => (
           <div key={index}  style={{ display: "flex", alignItems: "center", borderBottom: "1px solid black", height: "73px", padding: "0px 3px", fontWeight: "bold"}}> {item} </div>
-        ))}
+          ))}
       </div>
+      
+      {dataAllTransaction?.length === 0 ? (
+        <div style={{margin:'30px auto', fontSize:'40px'}}>Belum ada transaction</div>
+      ) : (
+        <div></div>
+      )}
 
       {dataAllTransaction?.map((item, index) => {
         return (
@@ -48,7 +53,13 @@ function TransactionList() {
             <div className="transactionLish">{index + 1}</div>
             <div className="transactionLish">{item.customerName}</div>
             <div className="transactionLish">{item.trip.title}</div>
-            <div className="transactionLish" style={{ color: '#0ACF83'}}>{item.status}</div>
+
+            {item.status === "Waiting Payment" ? (
+              <div className="transactionLish" style={{ color: '#EC7A7A'}}>{item.status}</div>
+            ) : (
+              <div className="transactionLish" style={{ color: '#0ACF83'}}>{item.status}</div>
+            )}
+            
 
             <div className="transactionLish">
               <img src={FolderImage.Magnifying} alt={FolderImage.Magnifying} onClick={() => handleIndex(index)} />
@@ -70,10 +81,13 @@ function TransactionList() {
                             <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataAllTransaction[numberIndex].trip.day} D/ {dataAllTransaction[numberIndex].night} N {dataAllTransaction[numberIndex].trip.title}</p>
 
                             <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataAllTransaction[numberIndex].trip.country.country}</p>
-
-                                <p style={{width:'112px', height:'24px',fontSize: '12px', color:'#EC7A7A', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center'}}>{dataAllTransaction[numberIndex].status}</p>
-                         
-
+                            
+                            {dataAllTransaction[numberIndex].status === "Waiting Payment" ? (
+                               <p style={{width:'112px', height:'24px',fontSize: '12px', color:'#EC7A7A', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center'}}>{dataAllTransaction[numberIndex].status}</p>
+                            ) : (
+                              <p style={{width:'112px', height:'24px',fontSize: '12px', color:'#0ACF83', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center'}}>{dataAllTransaction[numberIndex].status}</p>
+                            ) }
+                           
                         </div>
                             <div style={{display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2'}}>
                             <div>
@@ -140,7 +154,7 @@ function TransactionList() {
             
         </div> 
       </Modal> : <div></div>
-    }
+      }
     </div>
   );
 }

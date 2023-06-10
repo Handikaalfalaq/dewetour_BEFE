@@ -29,9 +29,8 @@ function IncomeTrip () {
               refetch();
             }
       });
-      console.log("datatrip", dataAllTrip)
     return (
-        <Container style={{ position:'relative', maxWidth:'1440px', height:'auto', backgroundColor:'white', padding:'100px', }}>
+        <Container style={{ position:'relative', maxWidth:'1440px', height:'auto', backgroundColor:'white', padding:'100px'}}>
             <div>
                 <div style={{display:'flex', justifyContent:'space-between', margin:'0px auto 20px'}}>
                     <p style={{fontSize:'36px', fontWeight:'bold'}}>Income Trip</p>
@@ -42,7 +41,7 @@ function IncomeTrip () {
                     </div>
                 </div>
                 
-                <CardGroup style={{display:"grid", gridTemplateColumns: "repeat(3, 1fr)", gridAutoRows: "auto", gridGap: "40px", paddingLeft:'35px' }}>
+                <CardGroup style={{display:"grid", gridTemplateColumns: "repeat(3, 1fr)", gridAutoRows: "auto", gridGap: "40px", paddingLeft:'35px', marginBottom:'100px' }}>
 
                     {dataAllTrip?.map((item, index) => {
                     return (

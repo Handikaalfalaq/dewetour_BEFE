@@ -36,7 +36,6 @@ function UpdateFormTrip() {
       const getTrip = async () => {
         try {
           const response = await API.get(`/trip/${id}`);
-          console.log("data response", response.data.data)
           const data = response.data.data
           setFormTrip({
             title: data.title,
@@ -106,14 +105,13 @@ function UpdateFormTrip() {
         console.log("add trip failed : ", error);
         throw error;
       }
-      
     });
       
     return (
       <div>
-        <div style={{ color:'red', fontSize:"30px"}}>X</div>
         <Form onSubmit={(e) => handleSubmit.mutate(e)} style={{padding:'108px 118px', position:'relative'}}>
-            <div style={{fontSize:'36px', marginBottom:'42px'}}>Add Trip</div>
+            <div style={{fontSize:'36px'}}>Add Trip</div>
+            <div style={{ color: 'red', fontSize: "20px", marginBottom: '42px', cursor: 'pointer' }} onClick={() => navigate('/IncomeTrip')}>close</div>
             <Form.Group className="mb-3">
                 <Form.Label>Title Trip</Form.Label>
                 <Form.Control name="title" value={formTrip.title} onChange={handleChange} style={{width:'1204px'}} required/>
@@ -171,7 +169,7 @@ function UpdateFormTrip() {
 
             <Form.Group className="mb-3">
                 <Form.Label>Description</Form.Label>
-                <Form.Control name="description"  value={formTrip.description} onChange={handleChange} style={{width:'1204px', height:'117px'}} required/>
+                <Form.Control as="textarea" name="description"  value={formTrip.description} onChange={handleChange} style={{width:'1204px', height:'117px'}} required/>
             </Form.Group>
         
             <Form.Group className="mb-3">

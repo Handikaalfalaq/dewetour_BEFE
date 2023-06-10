@@ -6,10 +6,10 @@ import {useQuery} from 'react-query';
 import { API } from '../../config/api';
 import Modal from 'react-bootstrap/modal';
 import jwtDecode from 'jwt-decode';
+import { useMutation } from 'react-query';
 
 
 function Payment () {
-    console.log("atas")
     const idToken = localStorage.getItem("token");
     const idUserByToken = jwtDecode(idToken)
 
@@ -25,9 +25,20 @@ function Payment () {
     const [payModal, setPayModal] = useState(false);
     const [paySukses, setPaySukses] = useState(false);
 
-    const handlePay = () => {
-        setPayModal(true);
-    }
+      const [formTransaction, setFormTransaction] = useState({
+        status: 'Approve',
+      });
+      
+      const handleSubmit = useMutation(async () => {
+        try {
+          setPayModal(true);
+          const response = await API.patch(`/transaction/${idLast}`, formTransaction);
+          console.log("update status success: ", response);
+        } catch (error) {
+          console.error("update status error: ", error);
+        }
+      });
+      
 
     const handleClosePopUp = () => {
         setAppearancePay(true)
@@ -49,7 +60,7 @@ function Payment () {
                             <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataLast?.trip?.country?.country}</p>
 
                             {paySukses ? (
-                                <p style={{width:'112px', height:'24px',fontSize: '12px', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color:'#FF9900'}}>Waiting Approve</p>
+                                <p style={{width:'112px', height:'24px',fontSize: '12px', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color:'#FF9900'}}>{dataLast?.status}</p>
                             ) : (
                                 <p style={{width:'112px', height:'24px',fontSize: '12px', color:'#EC7A7A', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center'}}>{dataLast?.status}</p>
                             )}
@@ -57,7 +68,7 @@ function Payment () {
                         </div>
                             <div style={{display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2'}}>
                             <div>
-                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Date Trip?</p>
+                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Date Trip</p>
                                 <p>{dataLast?.trip?.dateTrip}</p>
                             </div>
 
@@ -81,7 +92,7 @@ function Payment () {
 
                     <div rowSpan="2" style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                         <p style={{fontWeight:'bold', fontSize:'36px', marginBottom:'4px'}}>Booking</p>
-                        <p style={{margin:'0px'}}>{dataLast?.trip?.date}</p>
+                        <p style={{margin:'0px'}}>{dataLast?.date}</p>
                         {/* <img style={{margin:'20px 0px 13px'}} src={FolderImage.Nota} alt="" />
                         <p style={{fontSize:'13px', color:'#818181', margin:'0px'}}>Upload payment proof</p> */}
                     </div>
@@ -117,7 +128,8 @@ function Payment () {
                     {paySukses ? (
                         <div></div>
                     ): (
-                        <button style={{height:'50px', width:'213px', backgroundColor:'#FFAF00', borderRadius:'4px', border:'0px', position:'absolute', bottom:'-78px', right:'0px'}} onClick={handlePay}>PAY</button>
+                        <button style={{ height: '50px', width: '213px', backgroundColor: '#FFAF00', borderRadius: '4px', border: '0px', position: 'absolute', bottom: '-78px', right: '0px' }} onClick={() => handleSubmit.mutate()}>PAY</button>
+
                     )}
                     
                 </div>
