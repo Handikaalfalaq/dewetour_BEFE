@@ -58,14 +58,12 @@ function App() {
     });
     setIsLoading(false)
 
-
     if (response.data.data.role === 'admin' ) {
       // navigate('/TransactionList');
       redirect('/TransactionList');
       setNavbarProfile(true);
       setAdminLogin(true);
       setShowLoginModal(false);
-      console.log("ini admin")
     } else {
       setIdUserLogin(response.data.data.id)
       // navigate('/');

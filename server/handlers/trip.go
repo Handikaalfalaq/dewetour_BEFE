@@ -5,6 +5,7 @@ import (
 	tripdto "dumbmerch/dto/trip"
 	"dumbmerch/models"
 	"dumbmerch/repositories"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -106,19 +107,20 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 
 func (h *handlerTrip) UpdateDataTrip(c echo.Context) error {
 	dataFileUpdate := c.Get("dataFile").(string)
-	request := new(tripdto.UpdateTripRequest)
+	// request := new(tripdto.UpdateTripRequest)
 	// if err := c.Bind(&request); err != nil {
 	// 	return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	// }
 
 	id, _ := strconv.Atoi(c.Param("id"))
-	trip, err := h.TripRepository.GetUpdateId(id)
+	trip, err := h.TripRepository.GetTrip(id)
+	fmt.Println(trip)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 
-	countries, err := h.TripRepository.GetCountryId(request.CountryId)
+	// countries, err := h.TripRepository.GetCountryId(request.CountryId)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
@@ -131,8 +133,10 @@ func (h *handlerTrip) UpdateDataTrip(c echo.Context) error {
 		trip.Title = title
 	}
 
-	// var country = c.FormValue("country")
-	trip.Country = countries
+	var countryId, _ = strconv.Atoi(c.FormValue("country_id"))
+	if countryId != 0 {
+		trip.CountryId = countryId
+	}
 
 	var accomodation = c.FormValue("accomodation")
 	if accomodation != "" {
@@ -215,9 +219,9 @@ func (h *handlerTrip) DeleteDataTrip(c echo.Context) error {
 
 func convertResponseTrip(u models.Trip) tripdto.TripResponse {
 	return tripdto.TripResponse{
-		Id:    u.Id,
-		Title: u.Title,
-		CountryId:      u.CountryId,
+		Id:        u.Id,
+		Title:     u.Title,
+		CountryId: u.CountryId,
 		// Country:        u.Country,
 		Accomodation:   u.Accomodation,
 		Transportation: u.Transportation,

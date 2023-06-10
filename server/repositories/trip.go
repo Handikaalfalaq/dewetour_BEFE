@@ -38,7 +38,7 @@ func (r *repository) GetTrip(Id int) (models.Trip, error) {
 func (r *repository) GetUpdateId(Id int) (models.Trip, error) {
 	var Countries models.Trip
 	err := r.db.Preload("Country").First(&Countries, Id).Error
-
+	
 	return Countries, err
 }
 

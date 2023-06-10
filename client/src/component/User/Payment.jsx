@@ -18,12 +18,12 @@ function Payment () {
         return response.data.data
     }) 
     
-    const idLast = dataTransactionUser.length - 1
-    const dataLast = dataTransactionUser[idLast]
+    const idLast = (dataTransactionUser?.length??1) - 1
+    const dataLast = dataTransactionUser?.[idLast]??{}
+
     const { setAppearancePay} = useContext(DataContext);
     const [payModal, setPayModal] = useState(false);
     const [paySukses, setPaySukses] = useState(false);
-    
 
     const handlePay = () => {
         setPayModal(true);
@@ -44,36 +44,36 @@ function Payment () {
                         <div style={{gridColumn: 'span 2'}}><img src={FolderImage.Icon} alt="icon" style={{ height: '68px'}} /></div>
                         <div>
 
-                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataLast.trip.day} D/ {dataLast.trip.night} N {dataLast.trip.title}</p>
+                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataLast?.trip?.day} D/ {dataLast?.trip?.night} N {dataLast?.trip?.title}</p>
 
-                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataLast.trip.country.country}</p>
+                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataLast?.trip?.country?.country}</p>
 
                             {paySukses ? (
                                 <p style={{width:'112px', height:'24px',fontSize: '12px', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color:'#FF9900'}}>Waiting Approve</p>
                             ) : (
-                                <p style={{width:'112px', height:'24px',fontSize: '12px', color:'#EC7A7A', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center'}}>{dataLast.status}</p>
+                                <p style={{width:'112px', height:'24px',fontSize: '12px', color:'#EC7A7A', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center'}}>{dataLast?.status}</p>
                             )}
 
                         </div>
                             <div style={{display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2'}}>
                             <div>
-                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Date Trip</p>
-                                <p>{dataLast.trip.dateTrip}</p>
+                                <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Date Trip?</p>
+                                <p>{dataLast?.trip?.dateTrip}</p>
                             </div>
 
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Duration</p>
-                                <p>{dataLast.trip.day} day {dataLast.trip.night} night </p>
+                                <p>{dataLast?.trip?.day} day {dataLast?.trip?.night} night </p>
                             </div>
 
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Accomodation</p>
-                                <p>Hotel {dataLast.trip.night} Night</p>
+                                <p>Hotel {dataLast?.trip?.night} Night</p>
                             </div>
 
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Transportation</p>
-                                <p>{dataLast.trip.transportation}</p>
+                                <p>{dataLast?.trip?.transportation}</p>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@ function Payment () {
 
                     <div rowSpan="2" style={{display:'flex', flexDirection:'column', alignItems:'flex-end'}}>
                         <p style={{fontWeight:'bold', fontSize:'36px', marginBottom:'4px'}}>Booking</p>
-                        <p style={{margin:'0px'}}>{dataLast.trip.date}</p>
+                        <p style={{margin:'0px'}}>{dataLast?.trip?.date}</p>
                         {/* <img style={{margin:'20px 0px 13px'}} src={FolderImage.Nota} alt="" />
                         <p style={{fontSize:'13px', color:'#818181', margin:'0px'}}>Upload payment proof</p> */}
                     </div>
@@ -97,11 +97,11 @@ function Payment () {
                     
                     <div className="PaymentTabel2" style={{display: 'grid', gridTemplateColumns: '10% 18% 18% 18% 18% 18%', gridColumn: 'span 2', color:'#B1B1B1'}}>
                         <div>1</div>
-                        <div>{dataLast.customerName}</div>
-                        <div>{dataLast.customerGender}</div>
-                        <div>{dataLast.customerPhone}</div>
+                        <div>{dataLast?.customerName}</div>
+                        <div>{dataLast?.customerGender}</div>
+                        <div>{dataLast?.customerPhone}</div>
                         <div style={{color:'black', fontWeight:'bold'}}>Qty</div>
-                        <div style={{color:'black', fontWeight:'bold'}}>: {dataLast.amount}</div>
+                        <div style={{color:'black', fontWeight:'bold'}}>: {dataLast?.amount}</div>
                     </div>
 
                     <div className="PaymentTabel3" style={{ display: 'grid', gridTemplateColumns: '10% 18% 18% 18% 18% 18%', gridColumn: 'span 2', fontWeight:'bold'}}>
@@ -111,7 +111,7 @@ function Payment () {
                         <div></div>
                         <div>Total</div>
                         {/* <div style={{color:'red', border:'0px'}}>: IDR.</div> */}
-                        <div style={{color:'red', border:'0px'}}>: IDR.{dataLast.total.toLocaleString()}</div>
+                        <div style={{color:'red', border:'0px'}}>: IDR.{dataLast?.total?.toLocaleString()}</div>
                     </div>
                     
                     {paySukses ? (
