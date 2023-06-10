@@ -19,7 +19,6 @@ import UpdateTripForm from "./pages/updateTrip"
 import AddCountryForm from "./pages/AddCountry"
 import PrivateRoute from "./pages/PrivateRoutes"
 import { API, setAuthToken } from './config/api';
-import jwt_decode from "jwt-decode";
 
 
 function App() {
@@ -58,8 +57,9 @@ function App() {
       payload,
     });
     setIsLoading(false)
-    
-    if (state.user.role === 'admin' ) {
+
+
+    if (response.data.data.role === 'admin' ) {
       // navigate('/TransactionList');
       redirect('/TransactionList');
       setNavbarProfile(true);
@@ -101,7 +101,7 @@ function App() {
               <Route exact path="/" element={<PrivateRoute role="user"/>} >
                 <Route exact path="/" element={<Index/>} />
                 <Route exact path="/DetailTour/:id" element={<DetailTour/>} />
-                <Route exact path="/Payment/:id" element={<PaymentPage/>} />
+                <Route exact path="/Payment" element={<PaymentPage/>} />
                 <Route exact path="/Profile" element={<Profile/>} />
               </Route>
 

@@ -17,18 +17,13 @@ const dataHidden = DataTour.length - 3;
 function FotoTour (){
     const {data: dataAllTrip}= useQuery("dataAllTripCache", async () => {
         const response = await API.get("/trip")
+        console.log("apitrip", response.data.data)
         return response.data.data
     })
+
     const {  userLogin} = useContext(DataContext)
     const number = useParams("id")
-    // const idTrip = parseInt(number.id);
     const idTrip = dataAllTrip[number.id].id;
-
-    // console.log("type data", typeof idTrip);
-    // console.log("typeee",  number.id);
-    // console.log("type",  idTrip);
-    // console.log("data trips" , dataAllTrip[number.id]);
-    // console.log("data trips id nya" , dataAllTrip[number.id].id);
 
     const [modalImage, setmodalImage] = useState(false);
     const [modalForm, setModalForm] = useState(false);
@@ -95,6 +90,7 @@ function FotoTour (){
         customerName: '',
         customerGender: '',
         customerPhone: '',
+        status:'Waiting Payment'
       })
 
       const handleChange = (e) => {
@@ -103,8 +99,6 @@ function FotoTour (){
           [e.target.name]: e.target.value,
         });
       };
-
-      console.log("keren", formTransaction);
 
       const handleSubmit = useMutation(async (e) => {
         try {
@@ -115,22 +109,13 @@ function FotoTour (){
             },
         }
         const data = JSON.stringify(formTransaction)
-
-        //   const formData = new FormData();
-        //   formData.set('idTrip', formTransaction.idTrip);
-        //   formData.set('amount', formTransaction.amount);
-        //   formData.set('total', formTransaction.total);
-        //   formData.set('date', formTransaction.date);
-        //   formData.set('customerName', formTransaction.customerName);
-        //   formData.set('customerGender', formTransaction.customerGender);
-        //   formData.set('customerPhone', formTransaction.customerPhone);
           
           const response = await API.post('/transaction', data, config);
 
           console.log("add transaction success : ", response);
     
-          navigate('/Payment/' + number.id);
-          console.log("paymen", number.id)
+          navigate('/Payment');
+        //   console.log("paymen", number.id)
         } catch (error) {
           console.log("add trip failed : ", error);
         }

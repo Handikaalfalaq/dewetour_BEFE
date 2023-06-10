@@ -34,22 +34,19 @@ const reducer = (state, action) => {
 export const DataProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const [dataUserLogin, setDataUserLogin] = useState([]);
-    const [amount, setAmount] = useState('1');
-    const [dateBooking, setDateBooking] = useState('Belum ada tanggal');
     const [formLogin, setFormLogin] = useState([]);
     const [userLogin, setUserLogin] = useState(false);
     const [adminLogin, setAdminLogin] = useState(false);
     const [navbarProfile, setNavbarProfile] = useState(false);
     const [Number, setNumber] = useState('');
     const [dataBooking, setDataBooking] = useState('');
-    const [paySukses, setPaySukses] = useState(false);
     const [appearancePay, setAppearancePay] = useState(false);
     const [message, setMessage] = useState(null);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [idUserLogin, setIdUserLogin] = useState("");
 
     return (
-        <DataContext.Provider value={{ state, dispatch, dataUserLogin, setDataUserLogin, amount, setAmount, dateBooking, setDateBooking, userLogin, setUserLogin, dataBooking, setDataBooking, paySukses, setPaySukses, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
+        <DataContext.Provider value={{ state, dispatch, dataUserLogin, setDataUserLogin, userLogin, setUserLogin, dataBooking, setDataBooking, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
             {children}
         </DataContext.Provider>
 

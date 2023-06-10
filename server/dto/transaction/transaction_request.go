@@ -8,6 +8,7 @@ type CreateTransaction struct {
 	CustomerName   string `json:"customerName" form:"customerName" validate:"required"`
 	CustomerGender string `json:"customerGender" form:"customerGender" validate:"required"`
 	CustomerPhone  string `json:"customerPhone" form:"customerPhone" validate:"required"`
+	Status         string `json:"status" form:"status" validation:"required"`
 }
 
 type UpdateTransaction struct {
@@ -18,4 +19,5 @@ type UpdateTransaction struct {
 	CustomerName   string `json:"customerName" form:"customerName" `
 	CustomerGender string `json:"customerGender" form:"customerGender" `
 	CustomerPhone  string `json:"customerPhone" form:"customerPhone" `
+	Status         string `json:"status" form:"status"`
 }

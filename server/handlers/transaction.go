@@ -132,6 +132,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 		CustomerName:   request.CustomerName,
 		CustomerGender: request.CustomerGender,
 		CustomerPhone:  request.CustomerPhone,
+		Status:         request.Status,
 		// CreatedAt:      time.Now(),
 		// UpdatedAt:      time.Now(),
 	}
