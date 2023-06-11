@@ -46,7 +46,7 @@ export const DataProvider = ({children}) => {
     const [idUserLogin, setIdUserLogin] = useState("");
 
     return (
-        <DataContext.Provider value={{ state, dispatch, dataUserLogin, setDataUserLogin, userLogin, setUserLogin, dataBooking, setDataBooking, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
+        <DataContext.Provider value={{state, dispatch, dataUserLogin, setDataUserLogin, userLogin, setUserLogin, dataBooking, setDataBooking, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, Number, setNumber, appearancePay, setAppearancePay,  formLogin, setFormLogin, message, setMessage, showLoginModal, setShowLoginModal, idUserLogin, setIdUserLogin}}>
             {children}
         </DataContext.Provider>
 

@@ -22,7 +22,7 @@ function HistoryTrip () {
               {dataTransactionUser?.map((item, index) => {
                 return (
                   <div key={index} style={{ display: 'flex' }}>
-                    <div style={{ display: 'flex', width: '1440px', height: 'auto', padding: '0px 202px 60px', backgroundColor: '#E5E5E5' }}>
+                    <div style={{ display: 'flex', width: '1440px', height: 'auto', padding: '0px 202px 60px', backgroundColor: '#E5E5E5', marginBottom:'80px' }}>
                       <div className="grid-container" style={{ display: 'grid', gridTemplateColumns: 'auto auto', width: '1035px', height: '419px', padding: '8px 63px 17px 35px', border: '1px solid #B7B7B7', borderRadius: '10px', position: 'relative', backgroundColor: 'white' }}>
       
                         <div style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>

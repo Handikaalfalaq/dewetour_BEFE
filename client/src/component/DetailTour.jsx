@@ -21,7 +21,7 @@ function FotoTour (){
         return response.data.data
     })
 
-    const {  userLogin} = useContext(DataContext)
+    const { userLogin} = useContext(DataContext)
     const number = useParams("id")
     const idTrip = dataAllTrip[number.id].id;
 
@@ -106,16 +106,44 @@ function FotoTour (){
         const config = {
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
             },
         }
         const data = JSON.stringify(formTransaction)
           
           const response = await API.post('/transaction', data, config);
 
-          console.log("add transaction success : ", response);
+        var tokenMitrans = response.data.data.token;
+        localStorage.setItem("tokenMitrans", tokenMitrans);
+        //   console.log("apa ya", response)
+        //   console.log("disana", response.data.data.token)
+
+        console.log("disini", tokenMitrans)
+        //   const token = response.data.data.token;
+        //   console.log("data token",token)
+        //     window.snap.pay(token, {
+        //     onSuccess: function (result) {
+        //         /* You may add your own implementation here */
+        //         console.log(result);
+        //         navigate("/profile");
+        //     },
+        //     onPending: function (result) {
+        //         /* You may add your own implementation here */
+        //         console.log(result);
+        //         navigate("/profile");
+        //     },
+        //     onError: function (result) {
+        //         /* You may add your own implementation here */
+        //         console.log(result);
+        //         navigate("/profile");
+        //     },
+        //     onClose: function () {
+        //         /* You may add your own implementation here */
+        //         alert("you closed the popup without finishing the payment");
+        //     },
+        //     });
     
           navigate('/Payment');
-        //   console.log("paymen", number.id)
         } catch (error) {
           console.log("add trip failed : ", error);
         }
@@ -144,6 +172,24 @@ function FotoTour (){
     const handleCloseImage = () => {
         setmodalImage(false)
     }
+
+useEffect(() => {
+  //change this to the script source you want to load, for example this is snap.js sandbox env
+  const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+  //change this according to your client-key
+  const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
+
+  let scriptTag = document.createElement("script");
+  scriptTag.src = midtransScriptUrl;
+  // optional if you want to set script attribute
+  // for example snap.js have data-client-key attribute
+  scriptTag.setAttribute("data-client-key", myMidtransClientKey);
+
+  document.body.appendChild(scriptTag);
+  return () => {
+    document.body.removeChild(scriptTag);
+  };
+}, []);
     
     return(
         <>

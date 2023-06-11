@@ -1,15 +1,18 @@
+/* eslint-disable no-unused-vars */
 import FolderImage from "../img/FolderImg"
 import '../assets/Index.css'
 import { DataContext } from "../../context/dataContext";
-import { useContext, useState} from "react";
+import {  useState, useEffect} from "react";
 import {useQuery} from 'react-query';
 import { API } from '../../config/api';
 import Modal from 'react-bootstrap/modal';
 import jwtDecode from 'jwt-decode';
 import { useMutation } from 'react-query';
+import { useNavigate} from 'react-router-dom';
 
 
 function Payment () {
+    const navigate = useNavigate()
     const idToken = localStorage.getItem("token");
     const idUserByToken = jwtDecode(idToken)
 
@@ -21,7 +24,7 @@ function Payment () {
     const idLast = (dataTransactionUser?.length??1) - 1
     const dataLast = dataTransactionUser?.[idLast]??{}
 
-    const { setAppearancePay} = useContext(DataContext);
+    
     const [payModal, setPayModal] = useState(false);
     const [paySukses, setPaySukses] = useState(false);
 
@@ -31,9 +34,32 @@ function Payment () {
       
       const handleSubmit = useMutation(async () => {
         try {
-          setPayModal(true);
-          const response = await API.patch(`/transaction/${idLast}`, formTransaction);
-          console.log("update status success: ", response);
+        //   setPayModal(true);
+        //   const response = await API.patch(`/transaction/${idLast}`, formTransaction);
+        var tokenMitrans = localStorage.getItem("tokenMitrans");
+          const token = tokenMitrans;
+          console.log("data token",token)
+            window.snap.pay(token, {
+            onSuccess: function (result) {
+                navigate("/profile");
+            },
+            // onPending: function (result) {
+            //     /* You may add your own implementation here */
+            //     console.log(result);
+            //     navigate("/profile");
+            // },
+            // onError: function (result) {
+            //     /* You may add your own implementation here */
+            //     console.log(result);
+            //     navigate("/profile");
+            // },
+            // onClose: function () {
+            //     /* You may add your own implementation here */
+            //     alert("you closed the popup without finishing the payment");
+            // },
+            });
+
+        //   console.log("update status success: ", response);
         } catch (error) {
           console.error("update status error: ", error);
         }
@@ -41,10 +67,27 @@ function Payment () {
       
 
     const handleClosePopUp = () => {
-        setAppearancePay(true)
         setPayModal(false)
         setPaySukses(true);
     }
+
+    useEffect(() => {
+        //change this to the script source you want to load, for example this is snap.js sandbox env
+        const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
+        //change this according to your client-key
+        const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
+      
+        let scriptTag = document.createElement("script");
+        scriptTag.src = midtransScriptUrl;
+        // optional if you want to set script attribute
+        // for example snap.js have data-client-key attribute
+        scriptTag.setAttribute("data-client-key", myMidtransClientKey);
+      
+        document.body.appendChild(scriptTag);
+        return () => {
+          document.body.removeChild(scriptTag);
+        };
+      }, []);
 
     return (
         <div style={{display:'flex'}}>
