@@ -1,5 +1,4 @@
 import { Card } from "react-bootstrap"
-import DataTour from "./assets/DataDetailTour"
 import './assets/Index.css'
 import { useParams } from "react-router-dom";
 import React, {useState , useEffect, useContext, useRef} from 'react'
@@ -8,11 +7,9 @@ import FolderImage from './img/FolderImg'
 import { useNavigate} from 'react-router-dom';
 import { DataContext } from "../context/dataContext";
 import Modal from 'react-bootstrap/modal';
-import Carousel from 'react-bootstrap/Carousel';
 import {useQuery} from 'react-query';
 import { API } from '../config/api';
 import Form from 'react-bootstrap/Form';
-const dataHidden = DataTour.length - 3;
 
 function FotoTour (){
     const {data: dataAllTrip}= useQuery("dataAllTripCache", async () => {
@@ -22,19 +19,27 @@ function FotoTour (){
 
     const { userLogin} = useContext(DataContext)
     const number = useParams("id")
-    // const idTrip = dataAllTrip[number.id]?.id;
     const dataDetailTrip = dataAllTrip[number.id]
 
-    const [modalImage, setmodalImage] = useState(false);
     const [modalForm, setModalForm] = useState(false);
     const [modalInformasi, setModalInformasi] = useState(false);
     const [modalLogin, setModalLogin] = useState(false);
 
     const navigate = useNavigate()
+
     const [calculation, setCalculation] = useState(1);
+    const [modalMaxQuota, setModalMaxQuota] = useState(false)
     const handlePlusClick = () => {
-        setCalculation(calculation + 1);
+        if (calculation < dataDetailTrip?.quotaMax) {
+            setCalculation(calculation + 1);
+        }else if ( calculation === dataDetailTrip?.quotaMax ) {
+            setModalMaxQuota(true)
+        }
     };
+
+    const handleModalMaxQuota =() => {
+        setModalMaxQuota(false)
+    }
 
     const handleMinusClick = () => {
         if (calculation > 1) {
@@ -63,6 +68,7 @@ function FotoTour (){
             amount: amount,
             total: total,
             date: formattedDate.current,
+            idTrip: parseInt(number.id),
         }));
     }, [calculation, number.id, dataAllTrip, dataDetailTrip?.price]);
 
@@ -86,7 +92,7 @@ function FotoTour (){
         title : dataDetailTrip?.title,
         day : dataDetailTrip?.day,
         night : dataDetailTrip?.night,
-        country : dataDetailTrip?.country.id_country,
+        country : dataDetailTrip?.country?.id_country,
         dateTrip : dataDetailTrip?.dateTrip,
         transportation : dataDetailTrip?.transportation,
         status:'Waiting Payment',
@@ -134,51 +140,31 @@ function FotoTour (){
         } else {
             // setModalForm(false)
             handleSubmit.mutate()
-        }}
+        }} 
 
     const handleModalInformasi =() => {
         setModalInformasi(false)
         setModalForm(true)
     }
-    const handleOpenImage = () => {
-        setmodalImage(true)
-    }
     const handleModalLogin = () => {
         setModalLogin(false)
-    }
-
-    const handleCloseImage = () => {
-        setmodalImage(false)
     }
     
     return(
         <>
             <Card className="containerFotoTour" >
                 <div className="titleFotoTour">{dataDetailTrip?.title}</div>
-                <p className="destinationFotoTour">{dataDetailTrip?.country.country}</p>
+                <p className="destinationFotoTour">{dataDetailTrip?.country?.country}</p>
 
                 <div className="mainFotoTour" style={{backgroundImage: `url(${dataDetailTrip?.image})`}}></div>
                 <div className="imageFotoTour"> 
-
-                {DataTour[number.id]?.Image.slice(1, 4).map((image, index) => {
-                    if (index === 2) {
-                        return (
-                        <div key={index} className="secondaryFotoTour" style={{ backgroundImage: `url(${image})`, filter:'blur(1.5px)'}}></div>
-                        );
-                    } else {
-                        return (
-                        <div key={index} className="secondaryFotoTour" style={{ backgroundImage: `url(${image})` }}></div>
-                        );
-                    }
-                    })} 
-                    
-                    <p className="dataHidden" style={{cursor:'pointer'}} onClick={handleOpenImage}> + {dataHidden}</p>
+                
                 </div>
             </Card>
 
 
             <Card style={{padding:'0px 210px', borderRadius:'0px', maxWidth:'2040px', border:'0px', margin:'auto',backgroundColor:'transparent'}}>
-            <p style={{margin:'47px 0px 10px', height:'24px', fontWeight:'bold'}}>Information Trip</p>
+            <p style={{margin:'0px 0px 10px', height:'24px', fontWeight:'bold'}}>Information Trip</p>
             <div style={{display:'flex', justifyContent:'space-between'}}>
             
             <div>
@@ -254,19 +240,6 @@ function FotoTour (){
                 </div>
             </div>
 
-            <Modal show={modalImage} onHide={handleCloseImage} display={{alignItems:'center'}}>
-                <Carousel style={{ backgroundColor:'transparent', maxWidth:'3000px', display:'flex', flexDirection:'columb', }}>
-                
-                {DataTour[number.id]?.Image.map((image,index) => {
-                    return (
-                    <Carousel.Item interval={1000} key={index}>
-                        <div key={index} className="secondaryFotoTour" style={{ backgroundImage: `url(${image})`, backgroundSize:'cover', width:'500px', height:'400px', backgroundPosition: 'center', borderRadius:'10px'}}></div>
-                    </Carousel.Item>
-                    )
-                })}
-                </Carousel>
-            </Modal>
-
             <Modal show={modalForm} onHide={handleCloseForm} display={{alignItems:'center'}}>
                 <div style={{backgroundColor:'white', width:'550px', height:'350px', display:'flex', justifyContent:'center', alignItems:'center', borderRadius:'5px'}}>
                 <form style={{width:'500px', height:'300px', margin:'auto'}}>  
@@ -305,7 +278,11 @@ function FotoTour (){
             <Modal show={modalLogin} onHide={handleModalLogin} display={{alignItems:'center'}}>
                 <div style={{display:'flex', margin:'auto', color:'red', fontSize:'20px'}}>Sebelum Melakukan booking</div>
                 <div style={{display:'flex', margin:'auto', color:'red', fontSize:'20px'}}>Harus Login Terlebih Dahulu</div>
-            </Modal> 
+            </Modal>
+
+             <Modal show={modalMaxQuota} onHide={handleModalMaxQuota} display={{alignItems:'center'}}>
+                <div style={{display:'flex', margin:'auto', color:'red', fontSize:'20px'}}>Quota Sudah Maksimal</div>
+            </Modal>
         </> 
     )
 }

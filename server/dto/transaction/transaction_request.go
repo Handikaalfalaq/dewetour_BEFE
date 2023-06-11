@@ -15,6 +15,7 @@ type CreateTransaction struct {
 	CustomerPhone  string `json:"customerPhone" form:"customerPhone" validation:"required"`
 	Amount         int    `json:"amount" form:"amount" validation:"required"`
 	Total          int    `json:"total" form:"total" validation:"required"`
+	IdTrip         int    `json:"idTrip" form:"idTrip" validation:"required"`
 }
 
 type UpdateTransaction struct {
@@ -32,4 +33,5 @@ type UpdateTransaction struct {
 	CustomerPhone  string `json:"customerPhone" form:"customerPhone" `
 	Amount         int    `json:"amount" form:"amount" `
 	Total          int    `json:"total" form:"total" `
+	IdTrip         int    `json:"idTrip" form:"idTrip" `
 }

@@ -52,7 +52,7 @@ function TransactionList() {
           <div key={index} style={{ display: "grid", gridTemplateColumns: "repeat(6, 1fr)", gridAutoRows: "auto"}} >
             <div className="transactionLish">{index + 1}</div>
             <div className="transactionLish">{item.customerName}</div>
-            <div className="transactionLish">{item.trip.title}</div>
+            <div className="transactionLish">{item.title}</div>
 
             {item.status === "Waiting Payment" ? (
               <div className="transactionLish" style={{ color: '#EC7A7A'}}>{item.status}</div>
@@ -78,9 +78,9 @@ function TransactionList() {
                         <div style={{gridColumn: 'span 2'}}><img src={FolderImage.Icon} alt="icon" style={{ height: '68px'}} /></div>
                         <div>
 
-                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataAllTransaction[numberIndex].trip.day} D/ {dataAllTransaction[numberIndex].night} N {dataAllTransaction[numberIndex].trip.title}</p>
+                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataAllTransaction[numberIndex].day} D/ {dataAllTransaction[numberIndex].night} N {dataAllTransaction[numberIndex].title}</p>
 
-                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataAllTransaction[numberIndex].trip.country.country}</p>
+                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataAllTransaction[numberIndex].country.country}</p>
                             
                             {dataAllTransaction[numberIndex].status === "Waiting Payment" ? (
                                <p style={{width:'112px', height:'24px',fontSize: '12px', color:'#EC7A7A', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center'}}>{dataAllTransaction[numberIndex].status}</p>
@@ -92,7 +92,7 @@ function TransactionList() {
                             <div style={{display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2'}}>
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Date Trip</p>
-                                <p>{dataAllTransaction[numberIndex].trip.dateTrip}</p>
+                                <p>{dataAllTransaction[numberIndex].dateTrip}</p>
                             </div>
 
                             <div>

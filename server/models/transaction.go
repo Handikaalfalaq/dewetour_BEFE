@@ -19,6 +19,7 @@ type Transaction struct {
 	CustomerPhone  string               `json:"customerPhone" form:"customerPhone"`
 	Amount         int                  `json:"amount" form:"amount"`
 	Total          int                  `json:"total" form:"total"`
+	IdTrip         int                  `json:"idTrip" form:"idTrip"`
 	CreatedAt      time.Time            `json:"-"`
 	UpdatedAt      time.Time            `json:"-"`
 }
@@ -40,6 +41,7 @@ type TransactionResponse struct {
 	CustomerPhone  string               `json:"customerPhone" form:"customerPhone" `
 	Amount         int                  `json:"amount" form:"amount" `
 	Total          int                  `json:"total" form:"total" `
+	IdTrip         int                  `json:"idTrip" form:"idTrip" `
 }
 
 func (TransactionResponse) TableName() string {

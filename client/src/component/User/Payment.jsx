@@ -14,18 +14,16 @@ function Payment () {
     const navigate = useNavigate()
     const idToken = localStorage.getItem("token");
     const idUserByToken = jwtDecode(idToken)
-    console.log("dataiduser", idUserByToken.id)
 
     const {data: dataTransactionUser}= useQuery("dataTransactionUserCache", async () => {
         const response = await API.get(`/transactions/${idUserByToken.id}`)
         return response.data.data
     }) 
-
-    console.log("datadetail", dataTransactionUser)
     
     const idLast = (dataTransactionUser?.length??1) - 1
     const dataLast = dataTransactionUser?.[idLast]??{}
-    console.log("alhir", dataLast)
+    const last = dataLast?.idTrip
+    
     
     const [payModal, setPayModal] = useState(false);
     const [paySukses, setPaySukses] = useState(false);
@@ -82,7 +80,7 @@ function Payment () {
       }, []);
 
     return (
-        <div style={{display:'flex'}}>
+        <div style={{display:'flex' }}>
             <div style={{display:'flex', width:'1440px', height:'777px', padding:'66px 202px', backgroundColor:'#E5E5E5'}}>
                 <div className="grid-container" style={{display: 'grid', gridTemplateColumns: 'auto auto', width:'1035px', height:'419px', padding:'8px 63px 17px 35px', border:'1px solid #B7B7B7', borderRadius:'10px', position:'relative', backgroundColor:'white'}}>
 
@@ -163,8 +161,9 @@ function Payment () {
                     {paySukses ? (
                         <div></div>
                     ): (
+                        // <Modal show={true} style={{backgroundColor: 'rgba(255, 255, 255, 0)'}}>
                         <button style={{ height: '50px', width: '213px', backgroundColor: '#FFAF00', borderRadius: '4px', border: '0px', position: 'absolute', bottom: '-78px', right: '0px' }} onClick={() => handleSubmit.mutate()}>PAY</button>
-
+                        // </Modal>
                     )}
                     
                 </div>

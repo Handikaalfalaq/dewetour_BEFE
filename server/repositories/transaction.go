@@ -24,7 +24,7 @@ func RepositoryTransaction(db *gorm.DB) *repository {
 
 func (r *repository) FindTransaction() ([]models.Transaction, error) {
 	var Tansactions []models.Transaction
-	err := r.db.Preload("Trip.Country").Find(&Tansactions).Error
+	err := r.db.Preload("User").Find(&Tansactions).Error
 
 	return Tansactions, err
 }
@@ -38,10 +38,11 @@ func (r *repository) GetTransByUser(Id int) ([]models.Transaction, error) {
 
 func (r *repository) FindTransactionId(Id int) (models.Transaction, error) {
 	var Tansactions models.Transaction
-	err := r.db.Preload("Trip.Country").First(&Tansactions, Id).Error
+	err := r.db.Preload("User").First(&Tansactions, Id).Error
 
 	return Tansactions, err
 }
+
 func (r *repository) GetTripId(Id int) (models.TripResponse, error) {
 	var Tansactions models.TripResponse
 	err := r.db.Preload("Country").First(&Tansactions, Id).Error
@@ -51,7 +52,8 @@ func (r *repository) GetTripId(Id int) (models.TripResponse, error) {
 
 func (r *repository) GetUserId(Id int) (models.UsersProfileResponse, error) {
 	var Users models.UsersProfileResponse
-	err := r.db.Preload("Transaction").First(&Users, Id).Error
+	err := r.db.First(&Users, Id).Error
+	// err := r.db.Preload("Transaction").First(&Users, Id).Error
 
 	return Users, err
 }

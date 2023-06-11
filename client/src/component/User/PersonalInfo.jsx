@@ -37,7 +37,7 @@ function PersonalInfo (){
           try {
             const response = await API.get(`/user/${idUserLogin}`);
             const data = response.data.data
-            console.log(response.data.data)
+            
             setFormRegister({
               fullName: data.fullname,
               phone: data.phone,

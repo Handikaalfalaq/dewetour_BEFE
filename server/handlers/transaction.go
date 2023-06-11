@@ -152,6 +152,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 		CustomerPhone:  request.CustomerPhone,
 		Amount:         request.Amount,
 		Total:          request.Total,
+		IdTrip:         request.IdTrip,
 	}
 	data, err := h.TransactionRepository.CreateTransaction(transaction)
 	if err != nil {

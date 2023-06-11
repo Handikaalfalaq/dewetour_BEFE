@@ -12,7 +12,7 @@ function FormAddTrip() {
       const response = await API.get("/country")
       return response.data.data
   })
-    console.log("datacountry",dataCountry)
+  
     const [formTrip, setFormTrip] = useState({
       title: '',
       country:'',

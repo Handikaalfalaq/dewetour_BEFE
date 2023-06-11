@@ -19,4 +19,5 @@ type TransactionResponse struct {
 	CustomerPhone  string `json:"customerPhone" form:"customerPhone"`
 	Amount         int    `json:"amount" form:"amount"`
 	Total          int    `json:"total" form:"total"`
+	IdTrip         int    `json:"idTrip" form:"idTrip"`
 }
