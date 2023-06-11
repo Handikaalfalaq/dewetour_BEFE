@@ -10,13 +10,27 @@ import FormLogin from '../component/auth/FormLogin';
 import FormRegister from '../component/auth/FormRegister';
 import { DataContext } from "../context/dataContext";
 import { useNavigate } from 'react-router-dom';
+import { API } from '../config/api';
+import {useQuery} from 'react-query';
 
 
 function Navbars() {
   const navigate = useNavigate();
-  const {userLogin, setUserLogin, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, appearancePay, setAppearancePay, dataBooking, setMessage, showLoginModal, setShowLoginModal} = useContext(DataContext)
+  const {userLogin, setUserLogin, adminLogin, setAdminLogin, navbarProfile, setNavbarProfile, appearancePay, setAppearancePay, dataBooking, setMessage, showLoginModal, setShowLoginModal, idUserLogin} = useContext(DataContext)
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+
+  const {data: dataProfileUser}= useQuery("dataCountryCache", async () => {
+    const response = await API.get(`/user/${idUserLogin}`)
+    return response.data.data
+  })
   
+  var imageProfile = ''
+  if (dataProfileUser?.image !== '') {
+    imageProfile = dataProfileUser?.image
+  } else {
+    imageProfile = FolderImage?.imageProfile
+  }
+
   function logout () {
     localStorage.removeItem("token")
     navigate("/")
@@ -64,7 +78,7 @@ function Navbars() {
 
             {navbarProfile ? (
               (userLogin === true) ? (
-                <NavDropdown className='fotoprofil' style={{ backgroundImage: `url(${FolderImage.FotoProfil})`}}>
+                <NavDropdown className='fotoprofil' style={{ backgroundImage: `url(${imageProfile})`}}>
                   <NavDropdown.Item style={{ backgroundColor: 'white', borderRadius: '5px', padding: '20px 0px 20px'}}>
                     
                     <div onClick={() => navigate('/profile')} style={{ textDecoration: 'none', color: 'black', paddingLeft: '30px', display:'flex', marginBottom: '15px'}}>

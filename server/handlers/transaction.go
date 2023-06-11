@@ -2,7 +2,6 @@ package handlers
 
 import (
 	dto "dumbmerch/dto/result"
-	resultdto "dumbmerch/dto/result"
 	transactiondto "dumbmerch/dto/transaction"
 	"dumbmerch/models"
 	"dumbmerch/repositories"
@@ -43,7 +42,7 @@ func (h *HandlerTransactions) GetAllTransaction(c echo.Context) error {
 func (h *HandlerTransactions) GetTransByUser(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
 	transaction, err := h.TransactionRepository.GetTransByUser(id)
-
+	fmt.Println(transaction)
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusOK,
@@ -60,12 +59,12 @@ func (h *HandlerTransactions) FindTransactionId(c echo.Context) error {
 	transaction, _ := h.TransactionRepository.FindTransactionId(id)
 
 	if transaction.Id != id {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusInternalServerError,
 			Message: "data tidak ada"})
 	}
 
-	return c.JSON(http.StatusOK, resultdto.SuccessResult{
+	return c.JSON(http.StatusOK, dto.SuccessResult{
 		Code: http.StatusOK,
 		Data: transaction})
 }
@@ -75,7 +74,7 @@ func (h *HandlerTransactions) DeleteTransaction(c echo.Context) error {
 	transaction, _ := h.TransactionRepository.FindTransactionId(id)
 
 	if transaction.Id != id {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusBadRequest,
 			Message: "tidak ada"})
 	}
@@ -83,35 +82,35 @@ func (h *HandlerTransactions) DeleteTransaction(c echo.Context) error {
 	data, err := h.TransactionRepository.DeleteTransaction(id, transaction)
 
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, resultdto.ErrorResult{
+		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{
 			Code:    http.StatusBadRequest,
 			Message: err.Error()})
 	}
 
-	return c.JSON(http.StatusOK, resultdto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)})
+	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)})
 }
 
 func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 	request := new(transactiondto.CreateTransaction)
 
 	if err := c.Bind(request); err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusInternalServerError,
 			Message: err.Error()})
-	} //bind
+	}
 
 	validation := validator.New() //validator dan key global
 	err := validation.Struct(request)
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusBadRequest,
 			Message: err.Error()})
 	}
 
-	trips, err := h.TransactionRepository.GetTripId(request.IdTrip)
+	// trips, err := h.TransactionRepository.GetTripId(request.IdTrip)
 
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusBadRequest,
 			Message: err.Error()})
 	}
@@ -121,7 +120,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 
 	users, err := h.TransactionRepository.GetUserId(int(userId))
 	if err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusBadRequest,
 			Message: err.Error()})
 	}
@@ -140,21 +139,23 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 		Id:             transactionId,
 		IdUser:         int(userId),
 		User:           users,
-		IdTrip:         request.IdTrip,
-		Trip:           trips,
-		Amount:         request.Amount,
-		Total:          request.Total,
+		Title:          request.Title,
+		Day:            request.Day,
+		Night:          request.Night,
+		Country:        request.Country,
+		DateTrip:       request.DateTrip,
+		Transportation: request.Transportation,
+		Status:         request.Status,
 		Date:           request.Date,
 		CustomerName:   request.CustomerName,
 		CustomerGender: request.CustomerGender,
 		CustomerPhone:  request.CustomerPhone,
-		Status:         request.Status,
-		// CreatedAt:      time.Now(),
-		// UpdatedAt:      time.Now(),
+		Amount:         request.Amount,
+		Total:          request.Total,
 	}
 	data, err := h.TransactionRepository.CreateTransaction(transaction)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, resultdto.ErrorResult{
+		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{
 			Code:    http.StatusBadRequest,
 			Message: err.Error()})
 	}
@@ -190,7 +191,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 // func (h *HandlerTransactions) UpdateTransaction(c echo.Context) error {
 // 	request := new(transactiondto.UpdateTransaction)
 // 	if err := c.Bind(request); err != nil {
-// 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+// 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 // 			Code:    http.StatusBadRequest,
 // 			Message: err.Error()})
 // 	}
@@ -199,7 +200,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 // 	transaction, err := h.TransactionRepository.FindTransactionId(id)
 
 // 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+// 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 // 			Code:    http.StatusBadRequest,
 // 			Message: err.Error()})
 // 	}
@@ -207,7 +208,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 // 	trips, err := h.TransactionRepository.GetTripId(request.IdTrip)
 
 // 	if err != nil {
-// 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+// 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 // 			Code:    http.StatusBadRequest,
 // 			Message: err.Error()})
 // 	}
@@ -219,12 +220,12 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 // 	data, err := h.TransactionRepository.UpdateTransaction(id, transaction)
 
 // 	if err != nil {
-// 		return c.JSON(http.StatusInternalServerError, resultdto.ErrorResult{
+// 		return c.JSON(http.StatusInternalServerError, dto.ErrorResult{
 // 			Code:    http.StatusBadRequest,
 // 			Message: err.Error()})
 // 	}
 
-// 	return c.JSON(http.StatusOK, resultdto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)})
+// 	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)})
 // }
 
 func (h *HandlerTransactions) Notification(c echo.Context) error {
@@ -274,13 +275,18 @@ func convertResponseTransaction(Transaction models.Transaction) transactiondto.T
 		Id:             Transaction.Id,
 		IdUser:         Transaction.IdUser,
 		User:           Transaction.User,
-		IdTrip:         Transaction.IdTrip,
-		Trip:           Transaction.Trip,
-		Amount:         Transaction.Amount,
-		Total:          Transaction.Total,
+		Title:          Transaction.Title,
+		Day:            Transaction.Day,
+		Night:          Transaction.Night,
+		Country:        Transaction.Country,
+		DateTrip:       Transaction.DateTrip,
+		Transportation: Transaction.Transportation,
+		Status:         Transaction.Status,
 		Date:           Transaction.Date,
 		CustomerName:   Transaction.CustomerName,
 		CustomerGender: Transaction.CustomerGender,
 		CustomerPhone:  Transaction.CustomerPhone,
+		Amount:         Transaction.Amount,
+		Total:          Transaction.Total,
 	}
 }

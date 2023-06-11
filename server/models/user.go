@@ -10,6 +10,7 @@ type User struct {
 	Phone     string    `json:"phone" gorm:"varchar(255)" validation:"required"`
 	Address   string    `json:"address" gorm:"varchar(255)" validation:"required"`
 	Role      string    `json:"role"`
+	Image     string    `json:"image" form:"image" `
 	CreatedAt time.Time `json:"created_at"`
 	UpdateAt  time.Time `json:"update_at"`
 }
@@ -22,6 +23,7 @@ type UsersProfileResponse struct {
 	Phone    string `json:"phone"`
 	Address  string `json:"address"`
 	Role     string `json:"role"`
+	Image    string `json:"image" form:"image" `
 }
 
 func (UsersProfileResponse) TableName() string {

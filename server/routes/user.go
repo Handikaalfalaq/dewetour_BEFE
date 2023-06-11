@@ -2,6 +2,7 @@ package routes
 
 import (
 	"dumbmerch/handlers"
+	"dumbmerch/pkg/middleware"
 	"dumbmerch/pkg/mysql"
 	"dumbmerch/repositories"
 
@@ -15,6 +16,6 @@ func UserRoutes(e *echo.Group) {
 	e.GET("/users", h.GetAllUser)
 	e.GET("/user/:id", h.GetUserById)
 	// e.POST("/user", h.CreateNewUser)
-	e.PATCH("/user/:id", h.UpdateDataUser)
+	e.PATCH("/user/:id", middleware.UploadFile(h.UpdateDataUser))
 	e.DELETE("/user/:id", h.DeleteDataUser)
 }

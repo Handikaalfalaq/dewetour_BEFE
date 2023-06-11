@@ -12,7 +12,7 @@ function FormAddTrip() {
       const response = await API.get("/country")
       return response.data.data
   })
-    
+    console.log("datacountry",dataCountry)
     const [formTrip, setFormTrip] = useState({
       title: '',
       country:'',
@@ -141,7 +141,7 @@ function FormAddTrip() {
         
             <Form.Group className="mb-3">
                 <Form.Label>Image</Form.Label>
-                <Form.Control name="image" onChange={handleChange} type="file" required/>
+                <Form.Control name="image" onChange={handleChange} type="file"/>
             </Form.Group>
 
           <Button type="submit" style={{width:'150px', position:'absolute', left:'650px', bottom:'10px', backgroundColor:'#FFAF00', border:'0px'}} >Submit</Button>

@@ -11,11 +11,11 @@ import '../assets/Index.css'
 function FormRegister({openLogin}) {
   const {message, setMessage} = useContext(DataContext)
   const [formRegister, setFormRegister] = useState({
-    FullName: '',
-    Email: '',
-    Password: '',
-    Phone: '',
-    Address: '',
+    fullName: '',
+    email: '',
+    password: '',
+    phone: '',
+    address: '',
   });
 
   console.log(formRegister)
@@ -37,11 +37,11 @@ function FormRegister({openLogin}) {
       };
 
       const formData = new FormData();
-      formData.set('fullname', formRegister.FullName);
-      formData.set('email', formRegister.Email);
-      formData.set('password', formRegister.Password);
-      formData.set('phone', formRegister.Phone);
-      formData.set('address', formRegister.Address);
+      formData.set('fullname', formRegister.fullName);
+      formData.set('email', formRegister.email);
+      formData.set('password', formRegister.password);
+      formData.set('phone', formRegister.phone);
+      formData.set('address', formRegister.address);
 
       const response = await API.post('/register', formData, config);
 
@@ -82,26 +82,26 @@ function FormRegister({openLogin}) {
         {message && message}
         <Form.Group style={{marginBottom:'35px'}}>
             <Form.Label>Full Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter Full Name" name="FullName"  onChange={handleChange} required />
+            <Form.Control type="text" placeholder="Enter Full Name" name="fullName"  onChange={handleChange} required />
             <Form.Text className="text-muted">
             </Form.Text>
         </Form.Group>
         <Form.Group style={{marginBottom:'35px'}}>
             <Form.Label>Email</Form.Label>
-            <Form.Control type="email" placeholder="Enter Email" name="Email" onChange={handleChange} required/>
+            <Form.Control type="email" placeholder="Enter Email" name="email" onChange={handleChange} required/>
         </Form.Group>
         <Form.Group style={{marginBottom:'35px'}}>
             <Form.Label>Password</Form.Label>
-            <Form.Control type="password" placeholder="Enter Password" name="Password" onChange={handleChange} required/>
+            <Form.Control type="password" placeholder="Enter Password" name="password" onChange={handleChange} required/>
         </Form.Group>
         <Form.Group style={{marginBottom:'35px'}}>
             <Form.Label>Phone</Form.Label>
-            <Form.Control type="text" placeholder="Enter Phone" name="Phone" onChange={handleChange} required/>
+            <Form.Control type="text" placeholder="Enter Phone" name="phone" onChange={handleChange} required/>
         </Form.Group>
 
         <Form.Group style={{marginBottom:'35px'}}>
             <Form.Label>Address</Form.Label>
-            <Form.Control type='textarea' placeholder="Address" name="Address" style={{height:'70px'}} onChange={handleChange} required/>
+            <Form.Control type='textarea' placeholder="Address" name="address" style={{height:'70px'}} onChange={handleChange} required/>
         </Form.Group>
 
         <Button variant="primary" type="submit" style={{backgroundColor:'#FFAF00', border:'0px', width:'100%', marginBottom:'10px'}}>Register</Button>

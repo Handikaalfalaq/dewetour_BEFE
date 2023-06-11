@@ -16,6 +16,7 @@ import HibiscusLanding from './hibiscusLanding.png'
 import Hotel from './hotel.png'
 import Icon from './icon.png'
 import IconProfile from './iconProfile.png'
+import imageProfile from './imageProfile.jpeg'
 import JapanFushimIInariTaishaShrine from './japanFushimIInariTaishaShrine.jpg'
 import JapanGoldenPaviliun from './japanGoldenPaviliun.jpg'
 import JapanGunungFuji from './japanGunungFuji.jpg'
@@ -89,6 +90,7 @@ const FolderImage = {
   Hotel,
   Icon,
   IconProfile,
+  imageProfile,
   JapanFushimIInariTaishaShrine,
   JapanGoldenPaviliun,
   JapanGunungFuji,

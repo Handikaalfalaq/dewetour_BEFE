@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import FolderImage from "../img/FolderImg"
 import '../assets/Index.css'
-import { DataContext } from "../../context/dataContext";
 import {  useState, useEffect} from "react";
 import {useQuery} from 'react-query';
 import { API } from '../../config/api';
@@ -15,15 +14,18 @@ function Payment () {
     const navigate = useNavigate()
     const idToken = localStorage.getItem("token");
     const idUserByToken = jwtDecode(idToken)
+    console.log("dataiduser", idUserByToken.id)
 
     const {data: dataTransactionUser}= useQuery("dataTransactionUserCache", async () => {
         const response = await API.get(`/transactions/${idUserByToken.id}`)
         return response.data.data
     }) 
+
+    console.log("datadetail", dataTransactionUser)
     
     const idLast = (dataTransactionUser?.length??1) - 1
     const dataLast = dataTransactionUser?.[idLast]??{}
-
+    console.log("alhir", dataLast)
     
     const [payModal, setPayModal] = useState(false);
     const [paySukses, setPaySukses] = useState(false);
@@ -34,8 +36,6 @@ function Payment () {
       
       const handleSubmit = useMutation(async () => {
         try {
-        //   setPayModal(true);
-        //   const response = await API.patch(`/transaction/${idLast}`, formTransaction);
         var tokenMitrans = localStorage.getItem("tokenMitrans");
           const token = tokenMitrans;
           console.log("data token",token)
@@ -43,23 +43,19 @@ function Payment () {
             onSuccess: function (result) {
                 navigate("/profile");
             },
-            // onPending: function (result) {
-            //     /* You may add your own implementation here */
-            //     console.log(result);
-            //     navigate("/profile");
-            // },
-            // onError: function (result) {
-            //     /* You may add your own implementation here */
-            //     console.log(result);
-            //     navigate("/profile");
-            // },
-            // onClose: function () {
-            //     /* You may add your own implementation here */
-            //     alert("you closed the popup without finishing the payment");
-            // },
+            onPending: function (result) {
+                console.log(result);
+                navigate("/profile");
+            },
+            onError: function (result) {
+                console.log(result);
+                navigate("/profile");
+            },
+            onClose: function () {
+                alert("you closed the popup without finishing the payment");
+            },
             });
 
-        //   console.log("update status success: ", response);
         } catch (error) {
           console.error("update status error: ", error);
         }
@@ -72,15 +68,11 @@ function Payment () {
     }
 
     useEffect(() => {
-        //change this to the script source you want to load, for example this is snap.js sandbox env
         const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
-        //change this according to your client-key
         const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
       
         let scriptTag = document.createElement("script");
         scriptTag.src = midtransScriptUrl;
-        // optional if you want to set script attribute
-        // for example snap.js have data-client-key attribute
         scriptTag.setAttribute("data-client-key", myMidtransClientKey);
       
         document.body.appendChild(scriptTag);
@@ -98,9 +90,9 @@ function Payment () {
                         <div style={{gridColumn: 'span 2'}}><img src={FolderImage.Icon} alt="icon" style={{ height: '68px'}} /></div>
                         <div>
 
-                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataLast?.trip?.day} D/ {dataLast?.trip?.night} N {dataLast?.trip?.title}</p>
+                            <p style={{fontSize: '24px', fontWeight:'bold', margin:'0px', maxWidth:'370px'}}>{dataLast?.day} D/ {dataLast?.night} N {dataLast?.title}</p>
 
-                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataLast?.trip?.country?.country}</p>
+                            <p style={{fontSize: '14px', margin:'4px 0px 31px'}}>{dataLast?.country?.country}</p>
 
                             {paySukses ? (
                                 <p style={{width:'112px', height:'24px',fontSize: '12px', backgroundColor:'rgb(236, 122, 122, 0.3', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold', color:'#FF9900'}}>{dataLast?.status}</p>
@@ -112,22 +104,22 @@ function Payment () {
                             <div style={{display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2'}}>
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Date Trip</p>
-                                <p>{dataLast?.trip?.dateTrip}</p>
+                                <p>{dataLast?.dateTrip}</p>
                             </div>
 
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Duration</p>
-                                <p>{dataLast?.trip?.day} day {dataLast?.trip?.night} night </p>
+                                <p>{dataLast?.day} day {dataLast?.night} night </p>
                             </div>
 
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Accomodation</p>
-                                <p>Hotel {dataLast?.trip?.night} Night</p>
+                                <p>Hotel {dataLast?.night} Night</p>
                             </div>
 
                             <div>
                                 <p style={{fontWeight:'bold', marginBottom:'3px', fontSize:'18px'}}>Transportation</p>
-                                <p>{dataLast?.trip?.transportation}</p>
+                                <p>{dataLast?.transportation}</p>
                             </div>
                         </div>
                     </div>

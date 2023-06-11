@@ -31,7 +31,7 @@ func (r *repository) FindTransaction() ([]models.Transaction, error) {
 func (r *repository) GetTransByUser(Id int) ([]models.Transaction, error) {
 
 	var Transactions []models.Transaction
-	err := r.db.Where("id_user = ?", Id).Preload("User").Preload("Trip.Country").Find(&Transactions).Error
+	err := r.db.Where("id_user = ?", Id).Preload("User").Find(&Transactions).Error
 
 	return Transactions, err
 }
@@ -51,7 +51,7 @@ func (r *repository) GetTripId(Id int) (models.TripResponse, error) {
 
 func (r *repository) GetUserId(Id int) (models.UsersProfileResponse, error) {
 	var Users models.UsersProfileResponse
-	err := r.db.First(&Users, Id).Error
+	err := r.db.Preload("Transaction").First(&Users, Id).Error
 
 	return Users, err
 }
@@ -78,12 +78,12 @@ func (r *repository) UpdateTransaction(status string, orderId int) (models.Trans
 	var transaction models.Transaction
 	r.db.Preload("User").Preload("Trip.Country").First(&transaction, orderId)
 
-	if status != transaction.Status && status == "success" {
-		var trip models.Trip
-		r.db.First(&trip, transaction.Trip.ID)
-		trip.Price = trip.Price - transaction.Amount
-		r.db.Save(&trip)
-	}
+	// if status != transaction.Status && status == "success" {
+	// 	var trip models.Trip
+	// 	r.db.First(&trip, transaction.Trip.ID)
+	// 	trip.Price = trip.Price - transaction.Amount
+	// 	r.db.Save(&trip)
+	// }
 
 	transaction.Status = status
 	err := r.db.Save(&transaction).Error

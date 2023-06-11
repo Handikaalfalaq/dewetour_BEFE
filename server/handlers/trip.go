@@ -66,17 +66,16 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 
 	// countries, err := h.TripRepository.GetCountryId(request.CountryId)
 
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
-			Code:    http.StatusBadRequest,
-			Message: err.Error()})
-	}
+	// if err != nil {
+	// 	return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+	// 		Code:    http.StatusBadRequest,
+	// 		Message: err.Error()})
+	// }
 
 	day, _ := strconv.Atoi(c.FormValue("day"))
 	night, _ := strconv.Atoi(c.FormValue("night"))
 	price, _ := strconv.Atoi(c.FormValue("price"))
 	quotaMax, _ := strconv.Atoi(c.FormValue("quotaMax"))
-	// quotaFilled, _ := strconv.Atoi(c.FormValue("quotaFilled"))
 	countryId, _ := strconv.Atoi(c.FormValue("country_id"))
 
 	trip := models.Trip{
@@ -107,10 +106,6 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 
 func (h *handlerTrip) UpdateDataTrip(c echo.Context) error {
 	dataFileUpdate := c.Get("dataFile").(string)
-	// request := new(tripdto.UpdateTripRequest)
-	// if err := c.Bind(&request); err != nil {
-	// 	return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-	// }
 
 	id, _ := strconv.Atoi(c.Param("id"))
 	trip, err := h.TripRepository.GetTrip(id)
@@ -119,8 +114,6 @@ func (h *handlerTrip) UpdateDataTrip(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
-
-	// countries, err := h.TripRepository.GetCountryId(request.CountryId)
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
@@ -219,10 +212,9 @@ func (h *handlerTrip) DeleteDataTrip(c echo.Context) error {
 
 func convertResponseTrip(u models.Trip) tripdto.TripResponse {
 	return tripdto.TripResponse{
-		Id:        u.Id,
-		Title:     u.Title,
-		CountryId: u.CountryId,
-		// Country:        u.Country,
+		Id:             u.Id,
+		Title:          u.Title,
+		CountryId:      u.CountryId,
 		Accomodation:   u.Accomodation,
 		Transportation: u.Transportation,
 		Eat:            u.Eat,

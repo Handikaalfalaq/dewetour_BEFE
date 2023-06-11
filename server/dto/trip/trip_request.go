@@ -1,9 +1,8 @@
 package tripdto
 
 type CreateTripRequest struct {
-	Title     string `json:"title" form:"title" validate:"required"`
-	CountryId int    `json:"country_id" form:"country_id" `
-
+	Title          string `json:"title" form:"title" validate:"required"`
+	CountryId      int    `json:"country_id" form:"country_id" `
 	Accomodation   string `json:"accomodation" form:"accomodation" validate:"required"`
 	Transportation string `json:"transportation" form:"transportation" validate:"required"`
 	Eat            string `json:"eat" form:"eat" validate:"required"`

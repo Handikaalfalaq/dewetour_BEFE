@@ -17,13 +17,13 @@ const dataHidden = DataTour.length - 3;
 function FotoTour (){
     const {data: dataAllTrip}= useQuery("dataAllTripCache", async () => {
         const response = await API.get("/trip")
-        console.log("apitrip", response.data.data)
         return response.data.data
     })
 
     const { userLogin} = useContext(DataContext)
     const number = useParams("id")
-    const idTrip = dataAllTrip[number.id].id;
+    // const idTrip = dataAllTrip[number.id]?.id;
+    const dataDetailTrip = dataAllTrip[number.id]
 
     const [modalImage, setmodalImage] = useState(false);
     const [modalForm, setModalForm] = useState(false);
@@ -45,7 +45,7 @@ function FotoTour (){
     const formattedDate = useRef('');
     useEffect(() => {
         const amount = calculation;
-        const total = dataAllTrip[number.id]?.price * calculation;
+        const total = dataDetailTrip?.price * calculation;
 
         const handleDate = () => {
             const currentDate = new Date();
@@ -64,7 +64,7 @@ function FotoTour (){
             total: total,
             date: formattedDate.current,
         }));
-    }, [calculation, number.id, dataAllTrip]);
+    }, [calculation, number.id, dataAllTrip, dataDetailTrip?.price]);
 
 
     const handleBooking =() => {
@@ -83,14 +83,19 @@ function FotoTour (){
     }
 
     const [formTransaction, setFormTransaction] = useState({
-        idTrip: idTrip,
-        amount: '',
-        total:'',
+        title : dataDetailTrip?.title,
+        day : dataDetailTrip?.day,
+        night : dataDetailTrip?.night,
+        country : dataDetailTrip?.country.id_country,
+        dateTrip : dataDetailTrip?.dateTrip,
+        transportation : dataDetailTrip?.transportation,
+        status:'Waiting Payment',
         date:'',
         customerName: '',
         customerGender: '',
         customerPhone: '',
-        status:'Waiting Payment'
+        amount: '',
+        total:'',
       })
 
       const handleChange = (e) => {
@@ -102,7 +107,6 @@ function FotoTour (){
 
       const handleSubmit = useMutation(async (e) => {
         try {
-        //   e.preventDefault();
         const config = {
             headers: {
                 'Content-Type': 'application/json',
@@ -111,38 +115,12 @@ function FotoTour (){
         }
         const data = JSON.stringify(formTransaction)
           
-          const response = await API.post('/transaction', data, config);
+        const response = await API.post('/transaction', data, config);
 
         var tokenMitrans = response.data.data.token;
         localStorage.setItem("tokenMitrans", tokenMitrans);
-        //   console.log("apa ya", response)
-        //   console.log("disana", response.data.data.token)
 
         console.log("disini", tokenMitrans)
-        //   const token = response.data.data.token;
-        //   console.log("data token",token)
-        //     window.snap.pay(token, {
-        //     onSuccess: function (result) {
-        //         /* You may add your own implementation here */
-        //         console.log(result);
-        //         navigate("/profile");
-        //     },
-        //     onPending: function (result) {
-        //         /* You may add your own implementation here */
-        //         console.log(result);
-        //         navigate("/profile");
-        //     },
-        //     onError: function (result) {
-        //         /* You may add your own implementation here */
-        //         console.log(result);
-        //         navigate("/profile");
-        //     },
-        //     onClose: function () {
-        //         /* You may add your own implementation here */
-        //         alert("you closed the popup without finishing the payment");
-        //     },
-        //     });
-    
           navigate('/Payment');
         } catch (error) {
           console.log("add trip failed : ", error);
@@ -154,7 +132,7 @@ function FotoTour (){
             setModalInformasi(true)
             setModalForm(false)
         } else {
-            setModalForm(false)
+            // setModalForm(false)
             handleSubmit.mutate()
         }}
 
@@ -172,32 +150,14 @@ function FotoTour (){
     const handleCloseImage = () => {
         setmodalImage(false)
     }
-
-useEffect(() => {
-  //change this to the script source you want to load, for example this is snap.js sandbox env
-  const midtransScriptUrl = "https://app.sandbox.midtrans.com/snap/snap.js";
-  //change this according to your client-key
-  const myMidtransClientKey = process.env.REACT_APP_MIDTRANS_CLIENT_KEY;
-
-  let scriptTag = document.createElement("script");
-  scriptTag.src = midtransScriptUrl;
-  // optional if you want to set script attribute
-  // for example snap.js have data-client-key attribute
-  scriptTag.setAttribute("data-client-key", myMidtransClientKey);
-
-  document.body.appendChild(scriptTag);
-  return () => {
-    document.body.removeChild(scriptTag);
-  };
-}, []);
     
     return(
         <>
             <Card className="containerFotoTour" >
-                <div className="titleFotoTour">{dataAllTrip[number.id]?.title}</div>
-                <p className="destinationFotoTour">{dataAllTrip[number.id]?.country.country}</p>
+                <div className="titleFotoTour">{dataDetailTrip?.title}</div>
+                <p className="destinationFotoTour">{dataDetailTrip?.country.country}</p>
 
-                <div className="mainFotoTour" style={{backgroundImage: `url(${dataAllTrip[number.id]?.image})`}}></div>
+                <div className="mainFotoTour" style={{backgroundImage: `url(${dataDetailTrip?.image})`}}></div>
                 <div className="imageFotoTour"> 
 
                 {DataTour[number.id]?.Image.slice(1, 4).map((image, index) => {
@@ -225,7 +185,7 @@ useEffect(() => {
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Accomodation</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Calendar} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>Hotel {dataAllTrip[number.id]?.night} Night</p>
+                    <p style={{marginLeft:'14px'}}>Hotel {dataDetailTrip?.night} Night</p>
                 </div>
             </div>
 
@@ -233,7 +193,7 @@ useEffect(() => {
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Transportation</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Plane} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.transportation}</p>
+                    <p style={{marginLeft:'14px'}}>{dataDetailTrip?.transportation}</p>
                 </div>
             </div>
 
@@ -241,7 +201,7 @@ useEffect(() => {
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Eat</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Meal} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.eat}</p>
+                    <p style={{marginLeft:'14px'}}>{dataDetailTrip?.eat}</p>
                 </div>
             </div>
 
@@ -249,7 +209,7 @@ useEffect(() => {
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Duration</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Time} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.day} day {dataAllTrip[number.id]?.night} night </p>
+                    <p style={{marginLeft:'14px'}}>{dataDetailTrip?.day} day {dataDetailTrip?.night} night </p>
                 </div>
             </div>
 
@@ -258,21 +218,21 @@ useEffect(() => {
                 <p style={{fontSize:'12px' ,height:'18px', marginBottom:'3px', color:'#A8A8A8'}}>Date Trip</p>
                 <div style={{margin:'auto', fontSize:'17px' ,height:'33px', display:'flex', justifyContent:'center', alignItems:'center', fontWeight:'bold'}}>
                     <p><img src={FolderImage.Hotel} alt="icon" /></p>
-                    <p style={{marginLeft:'14px'}}>{dataAllTrip[number.id]?.dateTrip} </p>
+                    <p style={{marginLeft:'14px'}}>{dataDetailTrip?.dateTrip} </p>
                 </div>
             </div>
 
             </div>
             <div className="description">
                 <p style={{fontSize:'18px', margin:'20px 0px 7px', fontWeight:'bold'}}>Description</p>
-                <p style={{color:'#A8A8A8'}}>{dataAllTrip[number.id]?.description}</p>
+                <p style={{color:'#A8A8A8'}}>{dataDetailTrip?.description}</p>
             </div>
             </Card>
 
             <div className='containerPricePerson'>
                 <div className='tablePricePerson'>
                     <div style={{display:'flex'}}>
-                        <div style={{color:'#FFAF00', marginRight:'5px'}}>IDR. {dataAllTrip[number.id]?.price.toLocaleString()}</div>
+                        <div style={{color:'#FFAF00', marginRight:'5px'}}>IDR. {dataDetailTrip?.price.toLocaleString()}</div>
                         <div>/ Person</div>
                     </div>
                     <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>

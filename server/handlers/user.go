@@ -41,10 +41,11 @@ func (h *handler) GetUserById(c echo.Context) error {
 }
 
 func (h *handler) UpdateDataUser(c echo.Context) error {
-	request := new(usersdto.UpdateUserRequest)
-	if err := c.Bind(&request); err != nil {
-		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-	}
+	dataFileUpdate := c.Get("dataFile").(string)
+	// request := new(usersdto.UpdateUserRequest)
+	// if err := c.Bind(&request); err != nil {
+	// 	return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
+	// }
 
 	id, _ := strconv.Atoi(c.Param("id"))
 
@@ -54,16 +55,24 @@ func (h *handler) UpdateDataUser(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
 	}
 
-	if request.FullName != "" {
-		user.FullName = request.FullName
+	var fullName = c.FormValue("fullName")
+	if fullName != "" {
+		user.FullName = fullName
 	}
 
-	if request.Email != "" {
-		user.Email = request.Email
+	var phone = c.FormValue("phone")
+	if phone != "" {
+		user.Phone = phone
 	}
 
-	if request.Password != "" {
-		user.Password = request.Password
+	var address = c.FormValue("address")
+	if address != "" {
+		user.Address = address
+	}
+
+	var image = dataFileUpdate
+	if image != "" {
+		user.Image = image
 	}
 
 	data, err := h.UserRepository.UpdateUser(user)
