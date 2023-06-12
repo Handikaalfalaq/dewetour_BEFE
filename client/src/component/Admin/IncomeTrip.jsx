@@ -1,7 +1,7 @@
 import Card from 'react-bootstrap/Card';
 import '../assets/Index.css';
 import CardGroup from 'react-bootstrap/CardGroup';
-import Container from 'react-bootstrap/container';
+import { Container }from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import {useQuery, useMutation} from 'react-query';
 import { API } from '../../config/api';

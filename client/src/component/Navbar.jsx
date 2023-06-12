@@ -1,5 +1,5 @@
 import React, { useState, useContext} from 'react';
-import Container from 'react-bootstrap/container';
+import {Container} from 'react-bootstrap';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 import Nav from 'react-bootstrap/nav';
 import Navbar from 'react-bootstrap/navbar';
