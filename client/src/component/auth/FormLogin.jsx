@@ -1,12 +1,10 @@
 import React, { useState, useContext } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import {Button, Form, Alert} from 'react-bootstrap';
 import FolderImage from '../img/FolderImg';
 import { DataContext } from "../../context/dataContext";
 import { useMutation } from 'react-query';
 import { API, setAuthToken  } from '../../config/api';
 import { useNavigate } from 'react-router-dom';
-import { Alert } from 'react-bootstrap';
 import '../assets/Index.css'
 
 

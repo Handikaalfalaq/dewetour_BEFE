@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import {Form, Button} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { API } from '../../config/api';

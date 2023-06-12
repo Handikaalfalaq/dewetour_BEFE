@@ -1,8 +1,6 @@
 import React, { useState, useContext} from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import {Button, Form, Alert} from 'react-bootstrap';
 import FolderImage from '../img/FolderImg';
-import { Alert } from 'react-bootstrap';
 import { useMutation } from 'react-query';
 import { API } from '../../config/api';
 import { DataContext } from "../../context/dataContext";

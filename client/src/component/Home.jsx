@@ -1,8 +1,6 @@
-import { Container, Button, Form } from 'react-bootstrap';
-import Card from 'react-bootstrap/Card';
+import {CardGroup, Card, Container, Button, Form } from 'react-bootstrap';
 import './assets/Index.css'
 import dataInformation from './assets/dataInformation';
-import CardGroup from 'react-bootstrap/CardGroup';
 import { useNavigate} from 'react-router-dom';
 import {useQuery} from 'react-query';
 import { API } from '../config/api';
