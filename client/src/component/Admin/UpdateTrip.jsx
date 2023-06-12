@@ -113,7 +113,7 @@ function UpdateFormTrip() {
     return (
       <div>
         <Form onSubmit={(e) => handleSubmit.mutate(e)} style={{padding:'108px 118px', position:'relative'}}>
-            <div style={{fontSize:'36px'}}>Add Trip</div>
+            <div style={{fontSize:'36px'}}>Update Trip</div>
             <div style={{ color: 'red', fontSize: "20px", marginBottom: '42px', cursor: 'pointer' }} onClick={() => navigate('/IncomeTrip')}>close</div>
             <Form.Group className="mb-3">
                 <Form.Label>Title Trip</Form.Label>

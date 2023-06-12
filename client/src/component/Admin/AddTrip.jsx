@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
@@ -7,6 +7,7 @@ import { API } from '../../config/api';
 import {useQuery} from 'react-query';
 
 function FormAddTrip() {
+  const [countryNew, setCountryNew] = useState()
     const navigate = useNavigate();
     const {data: dataCountry}= useQuery("dataCountryCache", async () => {
       const response = await API.get("/country")
@@ -15,6 +16,13 @@ function FormAddTrip() {
     refetchInterval: 1000,
     refetchIntervalInBackground: true
   }) 
+  useEffect(() => {
+    if (dataCountry){
+      setCountryNew(dataCountry)
+    }
+  }, [dataCountry])
+
+  
 
   console.log("datacountry",dataCountry)
   
@@ -92,7 +100,7 @@ function FormAddTrip() {
                 <Form.Label>Country</Form.Label>
                 <Form.Select onChange={handleChange} name="country" style={{width:'1204px'}}>
                     <option>Select Country</option>
-                  {dataCountry?.map((item, index) => {
+                  {countryNew?.map((item, index) => {
                     return (
                     <option key={index} value={item.id_country} >{item.country}</option>
                     );

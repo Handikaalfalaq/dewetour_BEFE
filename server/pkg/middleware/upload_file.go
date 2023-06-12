@@ -4,8 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-
-	// "os"
+	"os"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
@@ -24,11 +23,11 @@ func UploadFile(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 		defer src.Close()
 		var ctx = context.Background()
-		// var CLOUD_NAME = os.Getenv("CLOUD_NAME")
-		// var API_KEY = os.Getenv("API_KEY")
-		// var API_SECRET = os.Getenv("API_SECRET")
+		var CLOUD_NAME = os.Getenv("CLOUD_NAME")
+		var API_KEY = os.Getenv("API_KEY")
+		var API_SECRET = os.Getenv("API_SECRET")
 
-		cld, _ := cloudinary.NewFromParams("djkqweia8", "366866585838435", "cszN6MG0wbqiAOIMwahl-6VtyMM")
+		cld, _ := cloudinary.NewFromParams(CLOUD_NAME, API_KEY, API_SECRET)
 		resp, err := cld.Upload.Upload(ctx, src, uploader.UploadParams{Folder: "dewetour"})
 
 		if err != nil {

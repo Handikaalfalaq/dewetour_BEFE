@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"dumbmerch/models"
+	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -79,15 +80,18 @@ func (r *repository) CreateTransaction(Transaction models.Transaction) (models.T
 func (r *repository) UpdateTransaction(status string, orderId int) (models.Transaction, error) {
 	var transaction models.Transaction
 	r.db.Preload("User").Preload("Trip.Country").First(&transaction, orderId)
-
-	// if status != transaction.Status && status == "success" {
-	// 	var trip models.Trip
-	// 	r.db.First(&trip, transaction.Trip.ID)
-	// 	trip.Price = trip.Price - transaction.Amount
-	// 	r.db.Save(&trip)
-	// }
+	fmt.Println("cccccc                                                                                                      cccccc", status, transaction.Status)
+	if status != transaction.Status && status == "success" {
+		var trip models.Trip
+		r.db.First(&trip, transaction.IdTrip)
+		trip.QuotaFilled = trip.QuotaFilled + transaction.Amount
+		fmt.Println("bbbbbbbb                                                                                                      bbbbbbbb", trip.QuotaFilled, transaction.Amount)
+		r.db.Save(&trip)
+	}
 
 	transaction.Status = status
 	err := r.db.Save(&transaction).Error
+	fmt.Println("aaaaaaa                                                                                                      aaaaaaa", status)
 	return transaction, err
+
 }

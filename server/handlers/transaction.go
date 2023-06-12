@@ -169,7 +169,7 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 	// 1. Initiate Snap client
 	var s = snap.Client{}
 	s.New(os.Getenv("SERVER_KEY"), midtrans.Sandbox)
-	s.New("SB-Mid-server-Lh7pYQxeOdq0rBg4a-7uhX5Q", midtrans.Sandbox)
+	// s.New("SB-Mid-server-Lh7pYQxeOdq0rBg4a-7uhX5Q", midtrans.Sandbox)
 
 	// 2. Initiate Snap request param
 	req := &snap.Request{

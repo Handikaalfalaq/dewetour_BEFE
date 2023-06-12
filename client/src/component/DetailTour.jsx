@@ -20,7 +20,8 @@ function FotoTour (){
     const { userLogin} = useContext(DataContext)
     const number = useParams("id")
     const dataDetailTrip = dataAllTrip[number.id]
-
+    
+    console.log("comment", dataAllTrip[number.id].id)
     const [modalForm, setModalForm] = useState(false);
     const [modalInformasi, setModalInformasi] = useState(false);
     const [modalLogin, setModalLogin] = useState(false);
@@ -68,9 +69,9 @@ function FotoTour (){
             amount: amount,
             total: total,
             date: formattedDate.current,
-            idTrip: parseInt(number.id),
+            idTrip: parseInt(dataDetailTrip.id),
         }));
-    }, [calculation, number.id, dataAllTrip, dataDetailTrip?.price]);
+    }, [calculation, dataDetailTrip.id, dataAllTrip, dataDetailTrip?.price]);
 
 
     const handleBooking =() => {

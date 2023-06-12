@@ -11,6 +11,7 @@ import Button from 'react-bootstrap/Button';
 
 function IncomeTrip () {
     const [confirDelete, setConfirdelete] = useState(false)
+    const [index, setIndex] = useState()
     const {data: dataAllTrip, refetch}= useQuery("dataAllTripCache", async () => {
         const response = await API.get("/trip")
         return response.data.data
@@ -20,10 +21,10 @@ function IncomeTrip () {
     
     const handleDelete = useMutation(async (itemId) => {
         try {
-            console.log("idnya", itemId)
-          const response = await API.delete(`/trip/${itemId}`); 
-          console.log("delete trip success : ", response);
-          setConfirdelete(false)
+        console.log("idnya", itemId)
+        const response = await API.delete(`/trip/${itemId}`); 
+        console.log("delete trip success : ", response);
+        setConfirdelete(false)
         } catch (error) {
           console.log("delete trip failed : ", error);}
         }, {
@@ -65,24 +66,24 @@ function IncomeTrip () {
                             <div style={{border:'1px solid black', backgroundColor:'black',color:'yellow', padding:'2px 10px', borderRadius:'10px', cursor:'pointer'}} onClick={(e) => {
                             navigate(`/UpdateTripForm/${item.id}`)}} >Update</div>
                             <div style={{border:'1px solid black', backgroundColor:'black',color:'red', padding:'2px 10px', borderRadius:'10px', cursor:'pointer'}}  onClick={() => {setConfirdelete(true)
+                            setIndex(item.id)
                                 }} >Delete</div>
                         </div>
-
-                        <Modal show={confirDelete} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                            <div style={{ backgroundColor: 'gray', padding: '20px', borderRadius: '5px', textAlign: 'center' }}>
-                                <div style={{ margin: 'auto', color: 'green' }}>Apakah trip ini akan dihapus?</div>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
-                                    <Button onClick={() => { handleDelete.mutate(item.id) }}>Iya</Button>
-                                    <Button onClick={() => { setConfirdelete(false) }}>Tidak</Button>
-                                </div>
-                            </div>
-                        </Modal>
-
 
                     </Card>
                     )
                     })}
                 </CardGroup>
+
+                <Modal show={confirDelete} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <div style={{ backgroundColor: 'gray', padding: '20px', borderRadius: '5px', textAlign: 'center' }}>
+                        <div style={{ margin: 'auto', color: 'green' }}>Apakah trip ini akan dihapus?</div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '20px' }}>
+                            <Button onClick={() => { handleDelete.mutate(index) }}>Iya</Button>
+                            <Button onClick={() => { setConfirdelete(false) }}>Tidak</Button>
+                        </div>
+                    </div>
+                </Modal>
           </div>
       </Container>
     )
