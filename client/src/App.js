@@ -19,6 +19,7 @@ import UpdateTripForm from "./pages/updateTrip"
 import AddCountryForm from "./pages/AddCountry"
 import PrivateRoute from "./pages/PrivateRoutes"
 import { API, setAuthToken } from './config/api';
+import jwtDecode from 'jwt-decode';
 
 
 function App() {
@@ -52,6 +53,9 @@ function App() {
     const response = await API.get('/check-auth');
     let payload = response.data.data;
     payload.token = localStorage.token;
+
+    const idToken = localStorage.getItem("token")
+
     dispatch({
       type: 'USER_SUCCESS',
       payload,
@@ -64,12 +68,14 @@ function App() {
       setNavbarProfile(true);
       setAdminLogin(true);
       setShowLoginModal(false);
-    } else {
+    } else if (response.data.data.role === 'user'){
       setIdUserLogin(response.data.data.id)
       // navigate('/');
       redirect('/');
       setNavbarProfile(true);
       setUserLogin(true);
+    } else {
+      console.log("salah")
     }
 
   } catch (error) {

@@ -11,7 +11,12 @@ function FormAddTrip() {
     const {data: dataCountry}= useQuery("dataCountryCache", async () => {
       const response = await API.get("/country")
       return response.data.data
-  })
+  }, {
+    refetchInterval: 1000,
+    refetchIntervalInBackground: true
+  }) 
+
+  console.log("datacountry",dataCountry)
   
     const [formTrip, setFormTrip] = useState({
       title: '',
@@ -92,6 +97,7 @@ function FormAddTrip() {
                     <option key={index} value={item.id_country} >{item.country}</option>
                     );
                   })}
+                  {/* <option  >indonesia</option> */}
                 </Form.Select>
             </Form.Group> 
 

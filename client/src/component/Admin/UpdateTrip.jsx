@@ -13,6 +13,9 @@ function UpdateFormTrip() {
     const {data: dataCountry}= useQuery("dataCountryCache", async () => {
       const response = await API.get("/country")
       return response.data.data
+  },{
+    refetchInterval: 1000,
+    refetchIntervalInBackground: true
   })
     
     const [formTrip, setFormTrip] = useState({
@@ -119,7 +122,7 @@ function UpdateFormTrip() {
             
             <Form.Group className="mb-3">
                 <Form.Label>Country</Form.Label>
-                <Form.Select value={formTrip.country} onChange={handleChange} name="country" style={{width:'1204px'}}>
+                <Form.Select value={formTrip?.country} onChange={handleChange} name="country" style={{width:'1204px'}}>
                     <option>Select Country</option>
                   {dataCountry?.map((item, index) => {
                     return (

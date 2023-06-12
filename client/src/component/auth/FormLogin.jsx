@@ -35,6 +35,7 @@ function FormLogin({openRegister}) {
       formData.set('password', formLogin.password)
 
       const response = await API.post('/login', formData);
+      console.log("response",response)
       dispatch({
         type: 'LOGIN_SUCCESS',
         payload: response.data.data,

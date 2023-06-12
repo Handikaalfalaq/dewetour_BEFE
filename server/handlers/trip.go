@@ -13,7 +13,7 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var path_file = "http://localhost:5000/uploads/"
+// var path_file = "http://localhost:5000/uploads/"
 
 type handlerTrip struct {
 	TripRepository repositories.TripRepository
@@ -27,10 +27,6 @@ func (h *handlerTrip) GetAllTrip(c echo.Context) error {
 	trips, err := h.TripRepository.FindTrips()
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
-	}
-
-	for i, p := range trips {
-		trips[i].Image = path_file + p.Image
 	}
 
 	return c.JSON(http.StatusOK, resultdto.SuccessResult{Code: http.StatusOK, Data: trips})
@@ -49,26 +45,11 @@ func (h *handlerTrip) GetTripById(c echo.Context) error {
 
 func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 	dataFile := c.Get("dataFile").(string)
-	request := new(tripdto.CreateTripRequest)
+	// request := new(tripdto.CreateTripRequest)
 
-	if err := c.Bind(request); err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
-			Code:    http.StatusInternalServerError,
-			Message: err.Error()})
-	}
-	validation := validator.New()
-	err := validation.Struct(request)
-	if err != nil {
-		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
-			Code:    http.StatusBadRequest,
-			Message: err.Error()})
-	}
-
-	// countries, err := h.TripRepository.GetCountryId(request.CountryId)
-
-	// if err != nil {
+	// if err := c.Bind(request); err != nil {
 	// 	return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
-	// 		Code:    http.StatusBadRequest,
+	// 		Code:    http.StatusInternalServerError,
 	// 		Message: err.Error()})
 	// }
 
@@ -92,6 +73,14 @@ func (h *handlerTrip) CreateNewTrip(c echo.Context) error {
 		QuotaFilled:    0,
 		Description:    c.FormValue("description"),
 		Image:          dataFile,
+	}
+
+	validation := validator.New()
+	err := validation.Struct(trip)
+	if err != nil {
+		return c.JSON(http.StatusBadRequest, resultdto.ErrorResult{
+			Code:    http.StatusBadRequest,
+			Message: err.Error()})
 	}
 
 	data, err := h.TripRepository.CreateTrip(trip)

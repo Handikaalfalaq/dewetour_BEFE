@@ -10,7 +10,9 @@ function HistoryTrip () {
         const response = await API.get(`/transactions/${idUserByToken.id}`)
         return response.data.data
     }) 
+
     const length = dataTransactionUser?.length
+    console.log("datanya", dataTransactionUser)
     return (
         <>
           {length === 0 ? (
@@ -28,8 +30,8 @@ function HistoryTrip () {
                         <div style={{ display: 'grid', gridTemplateColumns: 'auto auto' }}>
                           <div style={{ gridColumn: 'span 2' }}><img src={FolderImage.Icon} alt="icon" style={{ height: '68px' }} /></div>
                           <div>
-                            <p style={{ fontSize: '24px', fontWeight: 'bold', margin: '0px', maxWidth: '370px' }}>{item?.trip?.day} D/ {item?.trip?.night} N {item?.trip?.title}</p>
-                            <p style={{ fontSize: '14px', margin: '4px 0px 31px' }}>{item?.trip?.country?.country}</p>
+                            <p style={{ fontSize: '24px', fontWeight: 'bold', margin: '0px', maxWidth: '370px' }}>{item?.day} D/ {item?.night} N {item?.title}</p>
+                            {/* <p style={{ fontSize: '14px', margin: '4px 0px 31px' }}>{item?.country}</p> */}
 
                             {item?.status === "Waiting Payment" ? (
                                 <p style={{ width: '112px', height: '24px', fontSize: '12px', backgroundColor: 'rgba(236, 122, 122, 0.3)', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold', color: '#FF9900' }}>{item?.status}</p>
@@ -41,19 +43,19 @@ function HistoryTrip () {
                           <div style={{ display: 'grid', gridTemplateColumns: 'auto auto', gridRow: 'span 2' }}>
                             <div>
                               <p style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '18px' }}>Date Trip</p>
-                              <p>{item?.trip?.dateTrip}</p>
+                              <p>{item?.dateTrip}</p>
                             </div>
                             <div>
                               <p style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '18px' }}>Duration</p>
-                              <p>{item?.trip?.day} day {item?.trip?.night} night</p>
+                              <p>{item?.day} day {item?.night} night</p>
                             </div>
                             <div>
                               <p style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '18px' }}>Accommodation</p>
-                              <p>Hotel {item?.trip?.night} Night</p>
+                              <p>Hotel {item?.night} Night</p>
                             </div>
                             <div>
                               <p style={{ fontWeight: 'bold', marginBottom: '3px', fontSize: '18px' }}>Transportation</p>
-                              <p>{item?.trip?.transportation}</p>
+                              <p>{item?.transportation}</p>
                             </div>
                           </div>
                         </div>

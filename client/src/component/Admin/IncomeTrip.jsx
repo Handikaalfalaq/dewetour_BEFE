@@ -16,9 +16,11 @@ function IncomeTrip () {
         return response.data.data
     })
     const navigate = useNavigate();
+    console.log("data123", dataAllTrip)
     
     const handleDelete = useMutation(async (itemId) => {
         try {
+            console.log("idnya", itemId)
           const response = await API.delete(`/trip/${itemId}`); 
           console.log("delete trip success : ", response);
           setConfirdelete(false)

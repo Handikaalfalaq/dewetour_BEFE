@@ -6,6 +6,7 @@ import (
 	"dumbmerch/models"
 	"dumbmerch/repositories"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -16,6 +17,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/midtrans/midtrans-go"
 	"github.com/midtrans/midtrans-go/snap"
+	"github.com/yudapc/go-rupiah"
+	"gopkg.in/gomail.v2"
 )
 
 type HandlerTransactions struct {
@@ -26,14 +29,17 @@ func HandlerTransaction(TransactionRepository repositories.TransactionRepository
 	return &HandlerTransactions{TransactionRepository}
 }
 
+// var path_file = "http://localhost:5000/uploads/"
+
 func (h *HandlerTransactions) GetAllTransaction(c echo.Context) error {
 	transaction, err := h.TransactionRepository.FindTransaction()
 
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusOK,
-			Message: "Waduh"})
+			Message: "Gagal"})
 	}
+
 	return c.JSON(http.StatusOK, dto.SuccessResult{
 		Code: http.StatusOK,
 		Data: transaction})
@@ -56,12 +62,12 @@ func (h *HandlerTransactions) GetTransByUser(c echo.Context) error {
 
 func (h *HandlerTransactions) FindTransactionId(c echo.Context) error {
 	id, _ := strconv.Atoi(c.Param("id"))
-	transaction, _ := h.TransactionRepository.FindTransactionId(id)
+	transaction, err := h.TransactionRepository.FindTransactionId(id)
 
-	if transaction.Id != id {
+	if err != nil {
 		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
 			Code:    http.StatusInternalServerError,
-			Message: "data tidak ada"})
+			Message: err.Error()})
 	}
 
 	return c.JSON(http.StatusOK, dto.SuccessResult{
@@ -165,8 +171,6 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 	s.New(os.Getenv("SERVER_KEY"), midtrans.Sandbox)
 	s.New("SB-Mid-server-Lh7pYQxeOdq0rBg4a-7uhX5Q", midtrans.Sandbox)
 
-	// Use to midtrans.Production if you want Production Environment (accept real transaction).
-
 	// 2. Initiate Snap request param
 	req := &snap.Request{
 		TransactionDetails: midtrans.TransactionDetails{
@@ -226,14 +230,75 @@ func (h *HandlerTransactions) CreateTransaction(c echo.Context) error {
 // 			Message: err.Error()})
 // 	}
 
-// 	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)})
-// }
+//		return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: convertResponseTransaction(data)})
+//	}
+func sendEmail(status string, transaction models.Transaction) {
+	if status != transaction.Status && status == "success" {
+		var CONFIG_SMTP_HOST = "smtp.gmail.com"
+		var CONFIG_SMTP_PORT = 587
+		var CONFIG_SENDER_NAME = "DeweTour <handikaalfalaq02@gmail.com>"
+		var CONFIG_AUTH_EMAIL = "handikaalfalaq01@gmail.com"
+		var CONFIG_AUTH_PASSWORD = "bwpdjmzwmusbbbie"
+		fmt.Println("env", CONFIG_AUTH_EMAIL)
+		fmt.Println("env", CONFIG_AUTH_PASSWORD)
+		var tripName = transaction.Title
+		var price = rupiah.FormatRupiah(float64(transaction.Amount * transaction.Total))
+		fmt.Println(transaction.User.Email)
+
+		mailer := gomail.NewMessage()
+		mailer.SetHeader("From", CONFIG_SENDER_NAME)
+		mailer.SetHeader("To", transaction.User.Email)
+		mailer.SetHeader("Subject", "Transaction Status")
+		mailer.SetBody("text/html", fmt.Sprintf(`
+			<!DOCTYPE html>
+				<html lang="en">
+				<head>
+				<meta charset="UTF-8" />
+				<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+				<title>Document</title>
+				<style>
+					h1 {
+					color: brown;
+					}
+				</style>
+				</head>
+				<body>
+				<h2>Product payment :</h2>
+				<ul style="list-style-type:none;">
+					<li>Trip : %s</li>
+					<li>Total payment: %s</li>
+					<li>Status : <b>%s</b></li>
+					<li>Thank you for making the order, please wait for the trip schedule, Enjoy Your Trip</li>
+				</ul>
+				</body>
+			</html>
+		`, tripName, price, status))
+
+		dialer := gomail.NewDialer(
+			CONFIG_SMTP_HOST,
+			CONFIG_SMTP_PORT,
+			CONFIG_AUTH_EMAIL,
+			CONFIG_AUTH_PASSWORD,
+		)
+
+		err := dialer.DialAndSend(mailer)
+		if err != nil {
+			log.Fatal(err.Error())
+		}
+
+		log.Println("Mail sent! to " + transaction.User.Email)
+	}
+}
 
 func (h *HandlerTransactions) Notification(c echo.Context) error {
 	var notificationPayload map[string]interface{}
 
 	if err := c.Bind(&notificationPayload); err != nil {
-		return c.JSON(http.StatusBadRequest, dto.ErrorResult{Code: http.StatusBadRequest, Message: err.Error()})
+		return c.JSON(http.StatusBadRequest, dto.ErrorResult{
+			Code:    http.StatusBadRequest,
+			Message: err.Error(),
+		})
 	}
 
 	transactionStatus := notificationPayload["transaction_status"].(string)
@@ -242,7 +307,7 @@ func (h *HandlerTransactions) Notification(c echo.Context) error {
 
 	order_id, _ := strconv.Atoi(orderId)
 
-	fmt.Print("ini payloadnya", notificationPayload)
+	transaction, _ := h.TransactionRepository.FindTransactionId(order_id)
 
 	if transactionStatus == "capture" {
 		if fraudStatus == "challenge" {
@@ -251,10 +316,12 @@ func (h *HandlerTransactions) Notification(c echo.Context) error {
 			h.TransactionRepository.UpdateTransaction("pending", order_id)
 		} else if fraudStatus == "accept" {
 			// TODO set transaction status on your database to 'success'
+			sendEmail("success", transaction)
 			h.TransactionRepository.UpdateTransaction("success", order_id)
 		}
 	} else if transactionStatus == "settlement" {
 		// TODO set transaction status on your databaase to 'success'
+		sendEmail("success", transaction)
 		h.TransactionRepository.UpdateTransaction("success", order_id)
 	} else if transactionStatus == "deny" {
 		// TODO you can ignore 'deny', because most of the time it allows payment retries
@@ -267,8 +334,9 @@ func (h *HandlerTransactions) Notification(c echo.Context) error {
 		// TODO set transaction status on your databaase to 'pending' / waiting payment
 		h.TransactionRepository.UpdateTransaction("pending", order_id)
 	}
-
-	return c.JSON(http.StatusOK, dto.SuccessResult{Code: http.StatusOK, Data: notificationPayload})
+	return c.JSON(http.StatusOK, dto.SuccessResult{
+		Code: http.StatusOK, Data: notificationPayload,
+	})
 }
 
 func convertResponseTransaction(Transaction models.Transaction) transactiondto.TransactionResponse {

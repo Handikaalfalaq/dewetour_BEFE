@@ -16,8 +16,11 @@ function PersonalInfo (){
     const {data: dataProfileUser}= useQuery("dataCountryCache", async () => {
         const response = await API.get(`/user/${idUserLogin}`)
         return response.data.data
-    })
-
+    }, {
+      refetchInterval: 1000,
+      refetchIntervalInBackground: true
+    }
+    ) 
     const [formRegister, setFormRegister] = useState({
         fullName: '',
         phone: '',
