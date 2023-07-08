@@ -12,7 +12,6 @@ function FormAddCountry() {
     Name: ''
   });
 
-  console.log(formCountry);
 
   const handleChange = (e) => {
     setFormCountry({
