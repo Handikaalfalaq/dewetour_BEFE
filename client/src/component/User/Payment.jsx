@@ -36,7 +36,6 @@ function Payment () {
         try {
         var tokenMitrans = localStorage.getItem("tokenMitrans");
           const token = tokenMitrans;
-          console.log("data token",token)
             window.snap.pay(token, {
             onSuccess: function (result) {
                 navigate("/profile");
