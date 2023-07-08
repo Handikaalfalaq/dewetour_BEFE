@@ -22,9 +22,6 @@ function FormAddTrip() {
   }, [dataCountry])
 
   
-
-  console.log("datacountry",dataCountry)
-  
     const [formTrip, setFormTrip] = useState({
       title: '',
       country:'',
