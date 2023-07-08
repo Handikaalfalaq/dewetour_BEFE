@@ -12,7 +12,6 @@ function HistoryTrip () {
     }) 
 
     const length = dataTransactionUser?.length
-    console.log("datanya", dataTransactionUser)
     return (
         <>
           {length === 0 ? (
