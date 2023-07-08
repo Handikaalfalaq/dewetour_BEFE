@@ -16,7 +16,6 @@ function FormRegister({openLogin}) {
     address: '',
   });
 
-  console.log(formRegister)
 
   const handleChange = (e) => {
     setFormRegister({
