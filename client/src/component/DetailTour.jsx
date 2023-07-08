@@ -19,7 +19,6 @@ function FotoTour (){
     const number = useParams("id")
     const dataDetailTrip = dataAllTrip[number.id]
     
-    console.log("comment", dataAllTrip[number.id].id)
     const [modalForm, setModalForm] = useState(false);
     const [modalInformasi, setModalInformasi] = useState(false);
     const [modalLogin, setModalLogin] = useState(false);
@@ -125,7 +124,6 @@ function FotoTour (){
         var tokenMitrans = response.data.data.token;
         localStorage.setItem("tokenMitrans", tokenMitrans);
 
-        console.log("disini", tokenMitrans)
           navigate('/Payment');
         } catch (error) {
           console.log("add trip failed : ", error);
